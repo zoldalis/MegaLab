@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.31313.79
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MegaLab", "MegaLab\MegaLab.csproj", "{117B67EB-EB5F-4A76-86C7-F36E72CB95DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPServer", "TCPServer\TCPServer.csproj", "{8779A3AE-66EF-48DF-B3D6-85E4B29A3E27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{06990E7F-B5BC-49B0-9E87-B4DDC2D963C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{117B67EB-EB5F-4A76-86C7-F36E72CB95DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{117B67EB-EB5F-4A76-86C7-F36E72CB95DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{117B67EB-EB5F-4A76-86C7-F36E72CB95DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8779A3AE-66EF-48DF-B3D6-85E4B29A3E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8779A3AE-66EF-48DF-B3D6-85E4B29A3E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8779A3AE-66EF-48DF-B3D6-85E4B29A3E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8779A3AE-66EF-48DF-B3D6-85E4B29A3E27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06990E7F-B5BC-49B0-9E87-B4DDC2D963C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06990E7F-B5BC-49B0-9E87-B4DDC2D963C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06990E7F-B5BC-49B0-9E87-B4DDC2D963C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06990E7F-B5BC-49B0-9E87-B4DDC2D963C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
