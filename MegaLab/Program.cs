@@ -6,6 +6,7 @@ namespace MegaLab
     {
         static void Main(string[] args)
         {
+            Console.Write("Hi");
             Console.WriteLine("dsa");
             Console.WriteLine("dsad");
         }
