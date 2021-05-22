@@ -6,7 +6,7 @@ namespace MegaLab
     {
         static void Main(string[] args)
         {
-            вава
+            Console.Write("Hi");
         }
     }
 }
