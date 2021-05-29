@@ -12,5 +12,6 @@ namespace Client.Data
             : base(options)
         {
         }
+
     }
 }
