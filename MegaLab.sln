@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCPServer", "TCPServer\TCPS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{06990E7F-B5BC-49B0-9E87-B4DDC2D963C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBManager", "DBManager\DBManager.csproj", "{326117A7-40D3-4C01-BF65-46633470938A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBManager", "DBManager\DBManager.csproj", "{326117A7-40D3-4C01-BF65-46633470938A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controllers", "Controllers", "{51B930E4-6134-45FA-993B-ABF4434894CB}"
+	ProjectSection(SolutionItems) = preProject
+		Client\HumidityController.cs = Client\HumidityController.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
