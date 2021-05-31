@@ -12,6 +12,6 @@ namespace Client.Data
             : base(options)
         {
         }
-
+        public DbSet<Controller> Controllers { get; set; }
     }
 }
