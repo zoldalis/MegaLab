@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controllers", "Controllers"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppController", "CppController\Client.vcxproj", "{C3D03AE0-7851-45CD-8563-F302BF15EDB5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumidityController", "HumidityController\HumidityController.csproj", "{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,12 +61,25 @@ Global
 		{C3D03AE0-7851-45CD-8563-F302BF15EDB5}.Release|x64.Build.0 = Release|x64
 		{C3D03AE0-7851-45CD-8563-F302BF15EDB5}.Release|x86.ActiveCfg = Release|Win32
 		{C3D03AE0-7851-45CD-8563-F302BF15EDB5}.Release|x86.Build.0 = Release|Win32
+		{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC}.Debug|x64.Build.0 = Debug|Any CPU
+		{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC}.Debug|x86.Build.0 = Debug|Any CPU
+		{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC}.Release|x64.ActiveCfg = Release|Any CPU
+		{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC}.Release|x64.Build.0 = Release|Any CPU
+		{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC}.Release|x86.ActiveCfg = Release|Any CPU
+		{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C3D03AE0-7851-45CD-8563-F302BF15EDB5} = {51B930E4-6134-45FA-993B-ABF4434894CB}
+		{D5ABC461-FA35-4ACC-86E9-BEC3B57EEFDC} = {51B930E4-6134-45FA-993B-ABF4434894CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D65597BC-7EA8-4106-81BD-DB29AA802052}
