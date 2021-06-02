@@ -46,11 +46,8 @@ namespace Client
 
         static async Task Main(string[] args)
         {
-            int portNumber = Promt<int>("Порт:", // Запрос ввести порт
-                   port => port > 0 && port < 65535, // Проверка на то, что порт находится в дипазоне от 0 дл 65 535
-                   "Порт должен быть числов в диапазоне от 0 до 65 535" // Сообщение об ошибке
-               );
-            var address = Promt<string>("Адрес:"); // Адрес сервера (адрес локального компьютера - 127.0.0.1) 
+            const int port = 4040;
+            IPAddress localAddr = IPAddress.Parse("127.0.0.1");  // Адрес сервера (адрес локального компьютера - 127.0.0.1) 
             TcpClient client = new TcpClient();
 
             try

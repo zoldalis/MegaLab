@@ -8,9 +8,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBManager", "DBManager\DBManager.csproj", "{326117A7-40D3-4C01-BF65-46633470938A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controllers", "Controllers", "{51B930E4-6134-45FA-993B-ABF4434894CB}"
-	ProjectSection(SolutionItems) = preProject
-		Client\HumidityController.cs = Client\HumidityController.cs
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppController", "CppController\Client.vcxproj", "{C3D03AE0-7851-45CD-8563-F302BF15EDB5}"
 EndProject
