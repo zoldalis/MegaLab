@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,7 +53,7 @@ namespace Client
 
             try
             {
-                client.Connect(address, portNumber); // Подключение к серверу
+                //client.Connect(address, portNumber); // Подключение к серверу
             }
             catch (Exception) // Если произошла ошибка 
             {
