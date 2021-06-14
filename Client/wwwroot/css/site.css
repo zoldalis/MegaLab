@@ -35,8 +35,12 @@ html {
   }
 }
 
+.container {
+    
+}
+
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
 .border-bottom {
   border-bottom: 1px solid #e5e5e5;
@@ -49,6 +53,10 @@ html {
 button.accept-policy {
   font-size: 1rem;
   line-height: inherit;
+}
+
+.listi:hover {
+    color: cornflowerblue;
 }
 
 /* Sticky footer styles
