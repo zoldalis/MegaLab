@@ -32,7 +32,6 @@ namespace Client
                     continue; // и продолжаем цикл
                 }
 
-
                 if (validation == null || validation(result)) // Если функция валидации не задана или возвращает истину
                 {
                     break; // Выходим из цикла
@@ -60,13 +59,11 @@ namespace Client
                 return; // Завераем выполнение программы
             }
 
-
             var stream = client.GetStream(); // Открываем сетевой поток
-            client.ReceiveBufferSize = 2048 * 2048; // Устанавливаем размер буфера
+            client.ReceiveBufferSize = 1024; // Устанавливаем размер буфера
 
             var buffer = new byte[client.ReceiveBufferSize]; // Создание буффера
             var lengthBuffer = new byte[8]; // дополниетльный буффер
-
 
             try
             {
@@ -76,32 +73,20 @@ namespace Client
                     await stream.ReadAsync(lengthBuffer, 0, lengthBuffer.Length); // Считываем длину файла в массив байт        
                     var size = BitConverter.ToInt64(lengthBuffer, 0); // конвертируем массив байт в число типа long
 
-
-
-                    if (
-                        Promt<string>($"Принять файл весом {(size / 2048.0 / 2048.0).ToString("F")}MB?(да/нет)\n").ToLower() == "да"
-                    // Если пользователь подтверждает загрузку
-                    )
+                    stream.WriteByte(1); // Подтверждаем загрузку файла
+                    await stream.ReadAsync(lengthBuffer, 0, lengthBuffer.Length); //Считываем длину файла
+                    var c = await stream.ReadAsync(buffer, 0, (int)BitConverter.ToInt64(lengthBuffer, 0)); // Считываем название файла
+                    var name = Encoding.Unicode.GetString(buffer, 0, c); // Конвертирем массив байт в строку
+                    var fs = File.OpenWrite(name); // Открываем/создаем файл
+                    long readed = 0; // К-во считаных байт
+                    while (readed < size) // Пока к-во считаных байт меньше размера файла
                     {
-                        stream.WriteByte(1); // Подтверждаем загрузку файла
-                        await stream.ReadAsync(lengthBuffer, 0, lengthBuffer.Length); //Считываем длину файла
-                        var c = await stream.ReadAsync(buffer, 0, (int)BitConverter.ToInt64(lengthBuffer, 0)); // Считываем название файла
-                        var name = Encoding.Unicode.GetString(buffer, 0, c); // Конвертирем массив байт в строку
-                        var fs = File.OpenWrite(name); // Открываем/создаем файл
-                        long readed = 0; // К-во считаных байт
-                        while (readed < size) // Пока к-во считаных байт меньше размера файла
-                        {
                             var count = await stream.ReadAsync(buffer, 0, buffer.Length); // Читаем кусок из сетевого потока
                             readed += count;
                             await fs.WriteAsync(buffer, 0, count); // Записываем считаное в файл
-                        }
-                        fs.Close(); // Закрываем файл
-                        Console.WriteLine($"Файл {name} сохранен");
                     }
-                    else
-                    {
-                        stream.WriteByte(0); // Не подтверждаем загрузку
-                    }
+                    fs.Close(); // Закрываем файл
+                    Console.WriteLine($"Файл {name} сохранен");
                 }
             }
             catch (SocketException) // Если сервер отключился
