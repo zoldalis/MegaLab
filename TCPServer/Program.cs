@@ -7,6 +7,7 @@ namespace TCPServer
         static void Main(string[] args)
         {
             Console.WriteLine("Hello from server!");
+            Console.WriteLine("Hello from server!");
         }
     }
 }
