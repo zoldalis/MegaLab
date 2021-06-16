@@ -14,7 +14,7 @@
 #pragma comment (lib, "AdvApi32.lib")
 
 
-#define DEFAULT_BUFLEN 512
+#define DEFAULT_BUFLEN 1024
 #define DEFAULT_PORT "4040"
 
 int main()
@@ -26,7 +26,7 @@ int main()
         * ptr = NULL,
         hints;
 
-    std::string sendbuf = "asdlkfjasdkl;fjlsadkfj";
+    std::string sendbuf;
     //std::cin >> sendbuf;
     char recvbuf[DEFAULT_BUFLEN];
     int iResult;

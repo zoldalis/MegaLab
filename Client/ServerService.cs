@@ -8,12 +8,42 @@ using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
-
+//{0-8}{9-1023}
 namespace Client
 {
     public class ServerService : BackgroundService
     {
 
+        struct msg_to_serv
+        {
+            byte[] Id;
+
+        }
+
+        struct msg_to_temp_cont
+        {
+
+        }
+
+        struct msg_to_humi_cont
+        {
+
+        }
+
+        struct msg_to_light_cont
+        {
+
+        }
+
+        struct msg_to_bar_cont
+        {
+
+        }
+
+        struct msg_to_move_cont
+        {
+
+        }
 
         private readonly ApplicationDbContext _DBContext;
 

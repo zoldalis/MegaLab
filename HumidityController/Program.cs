@@ -50,7 +50,6 @@ namespace Client
             const int port = 4040;
             IPAddress localAddr = IPAddress.Parse("127.0.0.1");  // Адрес сервера (адрес локального компьютера - 127.0.0.1) 
             TcpClient client = new TcpClient();
-
             try
             {
                 //client.Connect(address, portNumber); // Подключение к серверу
