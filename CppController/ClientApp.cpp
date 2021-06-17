@@ -6,8 +6,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
+//#include <stdafx.h>
+#include "objbase.h"
+//#include "iostream.h"
+using namespace std;
 
-
+GUID gidReference;
+HRESULT hCreateGuid = CoCreateGuid( &gidReference );
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
@@ -25,8 +30,19 @@ int main()
     struct addrinfo* result = NULL,
         * ptr = NULL,
         hints;
+    char mes[1024];
+    
 
-    std::string sendbuf;
+    HRESULT hr;
+    GUID  guid;
+    hr = CoCreateGuid(&guid);
+    if (!FAILED(hr))
+    {
+        LPOLESTR szGUID = new WCHAR[39];
+        StringFromGUID2(guid, szGUID, 39);
+        wprintf(L"Inherited ObjectType GUID: %s\n", szGUID);
+    }
+    std::string sendbuf = "rtyuiop";
     //std::cin >> sendbuf;
     char recvbuf[DEFAULT_BUFLEN];
     int iResult;
