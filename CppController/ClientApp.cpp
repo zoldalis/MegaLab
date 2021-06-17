@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
-//#include <stdafx.h>
+#include <cstdlib>
 #include "objbase.h"
 //#include "iostream.h"
 using namespace std;
@@ -24,6 +24,10 @@ HRESULT hCreateGuid = CoCreateGuid( &gidReference );
 
 int main()
 {
+    using std::string;
+    setlocale(LC_ALL, "Russian");
+    // КОНТРОЛЛЕР ТЕМПЕРАТУРЫ (Контроллер температуры имеет следующие настройки: температура начала/окончания проветривания, температура 
+    //начала/окончания подогрева, верхняя и нижняя предельная граница температур для отправки экстренных смс сообщений и номер телефона для отправки сообщений.
     Sleep(10000);
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
@@ -31,17 +35,28 @@ int main()
         * ptr = NULL,
         hints;
     char mes[1024];
-    
+    int T = 23;
+    int TsA = 27;
+    int TeA = 17;
+    int TsH = 10;
+    int TeH = 20;
+    int TH = 30;
+    int TL = 9;
 
+LPOLESTR szGUID = new WCHAR[39];
     HRESULT hr;
     GUID  guid;
     hr = CoCreateGuid(&guid);
     if (!FAILED(hr))
     {
-        LPOLESTR szGUID = new WCHAR[39];
+        
         StringFromGUID2(guid, szGUID, 39);
-        wprintf(L"Inherited ObjectType GUID: %s\n", szGUID);
+        wprintf(L"GUID: %s", szGUID);
+        cout << szGUID << endl;
     }
+    wcout << szGUID << endl;
+
+
     std::string sendbuf = "rtyuiop";
     //std::cin >> sendbuf;
     char recvbuf[DEFAULT_BUFLEN];
@@ -108,8 +123,88 @@ int main()
         WSACleanup();
         return 1;
     }
-
+    T = rand() % 13 + 10;
     printf("Bytes Sent: %ld\n", iResult);
+    bool Flag = false;
+    bool Flag2 = false;
+    for (int i = 0; i < 10; i++)
+    {
+
+
+       
+        if (T >= TsA && T<TH)
+        {
+            Flag = true;
+            cout << "Начало проветривания " << T << endl;
+            T = T - rand() % 20 + 1;
+            goto asd;
+        }
+        else if (T < TsA && Flag == true && T> TeA)
+        {
+            cout << "Продолжается проветривание " << T << endl;
+            T = T - rand() % 17 + 1;
+            goto asd;
+        }
+        else if (T <= TeA && Flag == true)
+        {
+            cout << "Проветривание закончено " << T << endl;
+            Flag = false;
+            T = rand() % 10 + 1;
+            goto asd;
+        }
+
+        if (T <= TsH && T> TL)
+        {
+            cout << "Начало подогрева " << T << endl;
+            Flag2 = true;
+            T = rand() % 15 + T;
+            goto asd;
+        }
+        if (T > TsH && Flag2 == true && T<TeH)
+        {
+            cout << "Продолжается подогрев " << T << endl;
+            T = rand() % 10 + T;
+            goto asd;
+        }
+        if (T >= TeH && Flag2 == true)
+        {
+            Flag2 = false;
+            cout << "Подогрев закончен " << T << endl;
+            T = rand() % 10 + T;
+            goto asd;
+        }
+        if (T >= TH)
+        {
+            cout << "Предельно большая температура, отправка смс " << T << endl;
+            T = rand() % 10 + 10;
+            goto asd;
+        }
+        if (T <= TL)
+        {
+            cout << "Предельно низкая теспература, отправка смс " << T << endl;
+            T = rand() % 15 + 15;
+            goto asd;
+        }
+        if (T < 27 && T>10)
+        {
+            cout << "Нормальная температура " << T << endl;
+            
+        }
+        asd:
+        sendbuf = T;
+        iResult = send(ConnectSocket, sendbuf.c_str(), (int)strlen(sendbuf.c_str()), 0);
+        if (iResult == SOCKET_ERROR) {
+            printf("send failed with error: %d\n", WSAGetLastError());
+            closesocket(ConnectSocket);
+            WSACleanup();
+            return 1;
+        }
+
+        printf("Bytes Sent: %ld\n", iResult);
+        T = T + 5;
+    }
+
+
 
     // shutdown the connection since no more data will be sent
     iResult = shutdown(ConnectSocket, SD_SEND);
