@@ -16,8 +16,13 @@ namespace Client
 
         struct msg_to_serv
         {
-            byte[] Id;
-
+            byte[] id;
+            byte[] msg;
+            msg_to_serv(byte[] Id, byte[] Msg)
+            {
+                id = Id;
+                msg = Msg;
+            }
         }
 
         struct msg_to_temp_cont
@@ -91,6 +96,8 @@ namespace Client
 
                     //тут нужно реализовать логику обработки данных которые нам передали, распарсить их, понять когда нам передали guid, а когда собщение с данными датчика например
 
+
+
                     Console.WriteLine($"received : {cmd}");
 
 
@@ -111,6 +118,8 @@ namespace Client
             cont.Id = Guid.Parse(guid).ToString();
             _DBContext.Controllers.Add(cont);
         }
+
+
 
         public void MSGHandle(string msg)
         {
