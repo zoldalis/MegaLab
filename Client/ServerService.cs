@@ -103,6 +103,7 @@ namespace Client
 
 
                     //await stream.WriteAsync(data, 0, read, stoppingToken);
+                    stream.Write(Encoding.UTF8.GetBytes("Server Answer"),0,13);
                     stream.Flush();
 
                 }
