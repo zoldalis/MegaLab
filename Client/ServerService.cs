@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json;
 //{0-8}{9-1023}
 namespace Client
 {
@@ -27,26 +28,35 @@ namespace Client
 
         struct msg_to_temp_cont
         {
+            int sendinterval;
 
+            public override string ToString()
+            {
+                return sendinterval.ToString();
+            }
         }
 
         struct msg_to_humi_cont
         {
+            int sendinterval;
 
         }
 
         struct msg_to_light_cont
         {
+            int sendinterval;
 
         }
 
         struct msg_to_bar_cont
         {
+            int sendinterval;
 
         }
 
         struct msg_to_move_cont
         {
+            int sendinterval;
 
         }
 
@@ -111,21 +121,34 @@ namespace Client
 
             throw new NotImplementedException();
         }
+        //получить тип контроллера по гуиду
+        public string GetControllerType(string guid)
+        {
+            return _DBContext.Controllers.Find(guid).Type;
+        }
 
 
-        public void InitController(string guid)
+        //добавление контроллера в базу, по клиентскому запросу(кнопка добавить на сайте)
+        public void AddNewControler(string guid,string type,string userlogin)
         {
             Controller cont = new Controller();
-            cont.Id = Guid.Parse(guid).ToString();
+            cont.Id = guid;
+            cont.Type = type;
+            cont.User = userlogin;
             _DBContext.Controllers.Add(cont);
         }
 
+        //public void MSGHandle(string msg)
+        //{
+        //    InitController(msg);
+        //}
 
-
-        public void MSGHandle(string msg)
-        {
-            InitController(msg);
-        }
+        //public void InitController(string guid)
+        //{
+        //    Controller cont = new Controller();
+        //    cont.Id = Guid.Parse(guid).ToString();
+        //    _DBContext.Controllers.Add(cont);
+        //}
     }
 }
 
