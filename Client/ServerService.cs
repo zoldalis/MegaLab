@@ -155,6 +155,7 @@ namespace Client
                     if (msgstruct.guid == "" && msgstruct.msgtype=="get_guid")
                     {
                         string newguid = GenerateGuid();
+                        newguid += '\0';
                         stream.WriteAsync(Encoding.UTF8.GetBytes(newguid), 0, newguid.Length);
                     }
                     if (msgstruct.guid != "" && msgstruct.msgtype == "get_settings")
@@ -177,14 +178,12 @@ namespace Client
                                     string msg_to_send = to_t.ToString();
                                     stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
                                     break;
-                                    break;
                                 }
                             case "lightning":
                                 {
                                     msg_to_temp_cont to_t = new msg_to_temp_cont();
                                     string msg_to_send = to_t.ToString();
                                     stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                                    break;
                                     break;
                                 }
                             case "movement":
@@ -193,14 +192,12 @@ namespace Client
                                     string msg_to_send = to_t.ToString();
                                     stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
                                     break;
-                                    break;
                                 }
                             case "humidity":
                                 {
                                     msg_to_temp_cont to_t = new msg_to_temp_cont();
                                     string msg_to_send = to_t.ToString();
                                     stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                                    break;
                                     break;
                                 }
                             default:
