@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string>
 #include <cstdlib>
+#include<fstream>
 #include "objbase.h"
 //#include "iostream.h"
 using namespace std;
@@ -42,22 +43,23 @@ int main()
     int TeH = 20;
     int TH = 30;
     int TL = 9;
+    WCHAR guid[36];
 
-LPOLESTR szGUID = new WCHAR[39];
+
+
+/*LPOLESTR szGUID = new WCHAR[39];
     HRESULT hr;
     GUID  guid;
     hr = CoCreateGuid(&guid);
     if (!FAILED(hr))
     {
         
-        StringFromGUID2(guid, szGUID, 39);
+       StringFromGUID2(guid, szGUID, 39);
         wprintf(L"GUID: %s", szGUID);
         cout << szGUID << endl;
-    }
-    wcout << szGUID << endl;
-
-
-    std::string sendbuf = "rtyuiop";
+        wcout << szGUID << endl;
+    }*/
+    std::string sendbuf;
     //std::cin >> sendbuf;
     char recvbuf[DEFAULT_BUFLEN];
     int iResult;
@@ -115,7 +117,49 @@ LPOLESTR szGUID = new WCHAR[39];
         return 1;
     }
 
+    //ЗАПРОС ГУИД
+
+    std::string prover = "";
+    std::string asd = "asdasdasdasd3123123123";
+
+
+
+    //ВЫВОД ИЗ ФАЙЛА
+    std::string line;
+
+    std::ifstream in("test.txt"); // окрываем файл для чтения
+    
+    if (in.is_open())
+    {
+        while (getline(in, line))
+        {
+           cout << line << endl;
+           prover = line;
+        }
+    }
+    in.close();
+    if (prover == "")
+    {
+        ofstream f;
+        f.open("test.txt");
+        f << asd;
+        f.close();
+    }
     // Send an initial buffer
+   /* iResult = send(ConnectSocket, sendbuf.c_str(), (int)strlen(sendbuf.c_str()), 0);
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(ConnectSocket);
+        WSACleanup();
+        return 1;
+    }*/
+    T = rand() % 13 + 10;
+  //  printf("Bytes Sent: %ld\n", iResult);
+    bool Flag = false;
+    bool Flag2 = false;
+
+
+    sendbuf = "|get_guid|";
     iResult = send(ConnectSocket, sendbuf.c_str(), (int)strlen(sendbuf.c_str()), 0);
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
@@ -123,10 +167,9 @@ LPOLESTR szGUID = new WCHAR[39];
         WSACleanup();
         return 1;
     }
-    T = rand() % 13 + 10;
-    printf("Bytes Sent: %ld\n", iResult);
-    bool Flag = false;
-    bool Flag2 = false;
+
+
+
     for (int i = 0; i < 10; i++)
     {
 
@@ -216,21 +259,43 @@ LPOLESTR szGUID = new WCHAR[39];
     }
 
     // Receive until the peer closes the connection
-    do {
+    //do {
 
         iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
         if (iResult > 0)
         {
             //std::string s(static_cast<char const*>(recvbuf), recvbuflen);
-            printf("Answer is :" + *recvbuf);
-            printf("Bytes received: %d\n", iResult);
+           // printf("Answer is :" + *recvbuf);
+            printf(recvbuf);
+            for (int i = 0; i < 36; i++)
+            {
+                guid[i] = recvbuf[i];
+            }
+            printf("Bytes received: %d\n", iResult); 
+            wcout << "GUID = " << guid << endl;
         }
         else if (iResult == 0)
             printf("Connection closed\n");
         else
             printf("recv failed with error: %d\n", WSAGetLastError());
 
-    } while (iResult > 0);
+    //} while (iResult > 0);
+   
+
+
+    wofstream f;
+    f.open("test.txt");
+    f << guid;
+    f.close();
+
+
+
+
+
+
+
+
+
 
     // cleanup
     closesocket(ConnectSocket);
