@@ -99,21 +99,27 @@ namespace Client
                     //data - то что пришло с запроса
                     byte[] data = new byte[1024];
                     int read = await stream.ReadAsync(data, 0, 1024, stoppingToken);
-                    // если нихуя не пришло, то прекращаем обработку запроса
+                    // если ничего не пришло, то прекращаем обработку запроса
                     if (data[0] == (byte)0)
                         break;
-                    var cmd = Encoding.UTF8.GetString(data, 0, read);
+                    string cmd = Encoding.UTF8.GetString(data, 0, read);
 
                     //тут нужно реализовать логику обработки данных которые нам передали, распарсить их, понять когда нам передали guid, а когда собщение с данными датчика например
 
-
+                    //if (cmd == "")
+                    //{
+                        string newguid = GenerateGuid();
+                        stream.WriteAsync(Encoding.UTF8.GetBytes(newguid), 0, newguid.Length);
+                    //}
 
                     Console.WriteLine($"received : {cmd}");
 
 
 
+
+
                     //await stream.WriteAsync(data, 0, read, stoppingToken);
-                    stream.Write(Encoding.UTF8.GetBytes("Server Answer"),0,13);
+                    //stream.WriteAsync(Encoding.UTF8.GetBytes("Server Answer"),0,13);
                     stream.Flush();
 
                 }
@@ -122,6 +128,7 @@ namespace Client
             throw new NotImplementedException();
         }
         //получить тип контроллера по гуиду
+        //типы контроллеров : { temperature, pressure, lightning, movement, humidity }
         public string GetControllerType(string guid)
         {
             return _DBContext.Controllers.Find(guid).Type;
@@ -137,6 +144,13 @@ namespace Client
             cont.User = userlogin;
             _DBContext.Controllers.Add(cont);
         }
+
+        public string GenerateGuid()
+        {
+            Guid guid = Guid.NewGuid();
+            return guid.ToString();
+        }
+
 
         //public void MSGHandle(string msg)
         //{
