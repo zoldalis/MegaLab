@@ -24,11 +24,16 @@ http://www.hacksparrow.com/tcp-socket-programming-in-node-js.html.) */
 
 var net = require('net');
 
+const fs = require("fs");
+let msg = null;
+
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 var client = new net.Socket();
+client.setEncoding('utf8');
+
 client.connect(4040, '127.0.0.1', function() {
 	console.log('Connected');
 	client.write('Привет, сервер! С любовью, Клиент.');
@@ -36,8 +41,15 @@ client.connect(4040, '127.0.0.1', function() {
 
 client.on('data', function (data) {
 	console.log('Received:' + data);
-	//sleep(5000);
-	client.destroy(); // убить клиента после ответа сервера
+	fs.readFile("GUID.txt", "utf8",
+		function (error, data) {
+			if (error) throw error; // если возникла ошибка
+			msg = data;
+		});
+	if (msg == null || "") {
+		fs.writeFile("GUID.txt", data, function (error) {
+			if (error) throw error; // если возникла ошибка
+		});}
 });
 
 client.on('close', function () {
