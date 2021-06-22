@@ -9,17 +9,11 @@
 #include <cstdlib>
 #include<fstream>
 #include "objbase.h"
-//#include "iostream.h"
 using namespace std;
-
-GUID gidReference;
-HRESULT hCreateGuid = CoCreateGuid( &gidReference );
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
 #pragma comment (lib, "AdvApi32.lib")
-
-
 #define DEFAULT_BUFLEN 1024
 #define DEFAULT_PORT "4040"
 
@@ -27,8 +21,6 @@ int main()
 {
     using std::string;
     setlocale(LC_ALL, "Russian");
-    // КОНТРОЛЛЕР ТЕМПЕРАТУРЫ (Контроллер температуры имеет следующие настройки: температура начала/окончания проветривания, температура 
-    //начала/окончания подогрева, верхняя и нижняя предельная граница температур для отправки экстренных смс сообщений и номер телефона для отправки сообщений.
     Sleep(10000);
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
@@ -44,28 +36,11 @@ int main()
     int TH = 30;
     int TL = 9;
     WCHAR guid[36];
-
-
-
-/*LPOLESTR szGUID = new WCHAR[39];
-    HRESULT hr;
-    GUID  guid;
-    hr = CoCreateGuid(&guid);
-    if (!FAILED(hr))
-    {
-        
-       StringFromGUID2(guid, szGUID, 39);
-        wprintf(L"GUID: %s", szGUID);
-        cout << szGUID << endl;
-        wcout << szGUID << endl;
-    }*/
     std::string sendbuf;
-    //std::cin >> sendbuf;
     char recvbuf[DEFAULT_BUFLEN];
     int iResult;
     int recvbuflen = DEFAULT_BUFLEN;
-
-
+    std::string command;
 
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -73,7 +48,6 @@ int main()
         printf("WSAStartup failed with error: %d\n", iResult);
         return 1;
     }
-
     ZeroMemory(&hints, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
@@ -108,134 +82,165 @@ int main()
         }
         break;
     }
-
     freeaddrinfo(result);
-
     if (ConnectSocket == INVALID_SOCKET) {
         printf("Unable to connect to server!\n");
         WSACleanup();
         return 1;
     }
-
     //ЗАПРОС ГУИД
 
     std::string prover = "";
-    std::string asd = "asdasdasdasd3123123123";
-
-
-
-    //ВЫВОД ИЗ ФАЙЛА
     std::string line;
-
     std::ifstream in("test.txt"); // окрываем файл для чтения
-    
     if (in.is_open())
     {
         while (getline(in, line))
         {
-           cout << line << endl;
-           prover = line;
+            std::cout << line << endl;
+            prover = line;
         }
     }
     in.close();
+    std::cout << prover << endl;
+    
     if (prover == "")
     {
-        ofstream f;
+        //запрос guid
+        sendbuf = "|get_guid|";
+        iResult = send(ConnectSocket, sendbuf.c_str(), (int)strlen(sendbuf.c_str()), 0);
+        if (iResult == SOCKET_ERROR) {
+            printf("send failed with error: %d\n", WSAGetLastError());
+            closesocket(ConnectSocket);
+            WSACleanup();
+            return 1;
+        }
+
+        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+        if (iResult > 0)
+        {
+            printf(recvbuf);
+            for (int i = 0; i < 36; i++)
+            {
+                guid[i] = recvbuf[i];
+            }
+            printf("Bytes received: %d\n", iResult);
+            std::wcout << "GUID = " << guid << endl;
+        }
+        else if (iResult == 0)
+            printf("Connection closed\n");
+        else
+            printf("recv failed with error: %d\n", WSAGetLastError());
+
+        wofstream f;
         f.open("test.txt");
-        f << asd;
+        f << guid;
         f.close();
+        std::ifstream ins("test.txt");
+        if (ins.is_open())
+        {
+            while (getline(ins, line))
+            {
+                std::cout << line << endl;
+                prover = line;
+            }
+        }
+        ins.close();
     }
-    // Send an initial buffer
-   /* iResult = send(ConnectSocket, sendbuf.c_str(), (int)strlen(sendbuf.c_str()), 0);
-    if (iResult == SOCKET_ERROR) {
-        printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(ConnectSocket);
-        WSACleanup();
-        return 1;
-    }*/
     T = rand() % 13 + 10;
-  //  printf("Bytes Sent: %ld\n", iResult);
     bool Flag = false;
     bool Flag2 = false;
-
-
-    sendbuf = "|get_guid|";
-    iResult = send(ConnectSocket, sendbuf.c_str(), (int)strlen(sendbuf.c_str()), 0);
-    if (iResult == SOCKET_ERROR) {
-        printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(ConnectSocket);
-        WSACleanup();
-        return 1;
-    }
-
-
+    bool FlagC = false;
 
     for (int i = 0; i < 10; i++)
     {
 
-
-       
+        command = prover + "|send_data|";
+        
         if (T >= TsA && T<TH)
         {
             Flag = true;
-            cout << "Начало проветривания " << T << endl;
+            std::cout << "Начало проветривания " << T << endl;
+            FlagC = true;
+            command += std::to_string(T);
             T = T - rand() % 20 + 1;
             goto asd;
         }
         else if (T < TsA && Flag == true && T> TeA)
         {
-            cout << "Продолжается проветривание " << T << endl;
+            std::cout << "Продолжается проветривание " << T << endl;
+            FlagC = true;
+            command += std::to_string(T);
             T = T - rand() % 17 + 1;
             goto asd;
         }
         else if (T <= TeA && Flag == true)
         {
-            cout << "Проветривание закончено " << T << endl;
+            std::cout << "Проветривание закончено " << T << endl;
             Flag = false;
+            FlagC = true;
+            command += std::to_string(T);
             T = rand() % 10 + 1;
             goto asd;
         }
 
         if (T <= TsH && T> TL)
         {
-            cout << "Начало подогрева " << T << endl;
+            std::cout << "Начало подогрева " << T << endl;
             Flag2 = true;
+            FlagC = true;
+            command += std::to_string(T);
             T = rand() % 15 + T;
             goto asd;
         }
         if (T > TsH && Flag2 == true && T<TeH)
         {
-            cout << "Продолжается подогрев " << T << endl;
+            std::cout << "Продолжается подогрев " << T << endl;
+            FlagC = true;
+            command += std::to_string(T);
             T = rand() % 10 + T;
+            
             goto asd;
         }
         if (T >= TeH && Flag2 == true)
         {
             Flag2 = false;
-            cout << "Подогрев закончен " << T << endl;
+            FlagC = true;
+            command += std::to_string(T);
+            std::cout << "Подогрев закончен " << T << endl;
             T = rand() % 10 + T;
             goto asd;
         }
         if (T >= TH)
         {
-            cout << "Предельно большая температура, отправка смс " << T << endl;
+            std::cout << "Предельно большая температура, отправка смс " << T << endl;
+            FlagC = true;
+            command += std::to_string(T);
             T = rand() % 10 + 10;
             goto asd;
         }
         if (T <= TL)
         {
-            cout << "Предельно низкая теспература, отправка смс " << T << endl;
+            std::cout << "Предельно низкая теспература, отправка смс " << T << endl;
+            FlagC = true;
+            command += std::to_string(T);
             T = rand() % 15 + 15;
             goto asd;
         }
         if (T < 27 && T>10)
         {
-            cout << "Нормальная температура " << T << endl;
+            std::cout << "Нормальная температура " << T << endl;
             
         }
-        asd:
-        sendbuf = T;
-        iResult = send(ConnectSocket, sendbuf.c_str(), (int)strlen(sendbuf.c_str()), 0);
+    asd:
+        if (FlagC == false)
+        {
+        command += std::to_string(T);
+        }
+        FlagC = false;
+        
+        std::cout << command << " Command to send" << endl;
+        iResult = send(ConnectSocket, command.c_str(), (int)strlen(command.c_str()), 0);
         if (iResult == SOCKET_ERROR) {
             printf("send failed with error: %d\n", WSAGetLastError());
             closesocket(ConnectSocket);
@@ -247,8 +252,6 @@ int main()
         T = T + 5;
     }
 
-
-
     // shutdown the connection since no more data will be sent
     iResult = shutdown(ConnectSocket, SD_SEND);
     if (iResult == SOCKET_ERROR) {
@@ -257,45 +260,6 @@ int main()
         WSACleanup();
         return 1;
     }
-
-    // Receive until the peer closes the connection
-    //do {
-
-        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-        if (iResult > 0)
-        {
-            //std::string s(static_cast<char const*>(recvbuf), recvbuflen);
-           // printf("Answer is :" + *recvbuf);
-            printf(recvbuf);
-            for (int i = 0; i < 36; i++)
-            {
-                guid[i] = recvbuf[i];
-            }
-            printf("Bytes received: %d\n", iResult); 
-            wcout << "GUID = " << guid << endl;
-        }
-        else if (iResult == 0)
-            printf("Connection closed\n");
-        else
-            printf("recv failed with error: %d\n", WSAGetLastError());
-
-    //} while (iResult > 0);
-   
-
-
-    wofstream f;
-    f.open("test.txt");
-    f << guid;
-    f.close();
-
-
-
-
-
-
-
-
-
 
     // cleanup
     closesocket(ConnectSocket);
