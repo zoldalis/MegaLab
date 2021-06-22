@@ -1,0 +1,38 @@
+﻿@page
+@model Client.Pages.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Controller</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Controller.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Controller.Type)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Controller.User)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Controller.User)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Controller.Settings)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Controller.Settings)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Controller.Id">Edit</a> |
+    <a asp-page="./AddController">Back to List</a>
+</div>
