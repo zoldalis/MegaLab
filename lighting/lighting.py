@@ -7,7 +7,7 @@ import threading
 s = socket.socket()                                                 # создаем обьект сокета
 s.connect(('127.0.0.1', 4040))                                      # подключаемся к серваку
 
-conf_file_path = 'D:\conf_f.txt'                                    # расположение конфиг файла
+conf_file_path = 'conf_f.txt'                                    # расположение конфиг файла
 #4AA95827-0199-4F82-9CC5-0FB36F1056D9
 full_message_by_byte = bytes('', 'utf-8')                                                # переменная
 message = ""
@@ -101,6 +101,7 @@ def send_message():                                                 # метод
     s.sendall(construct(id,message,fake_time))
 
 def send_message_get_sett():
+    global id
     s.sendall(str.encode(id+'|'+"get_settings|"))
 def server_message_listener():                                      # метод чтения сообщений от сервера
     global sun_day_start
