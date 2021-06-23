@@ -5,7 +5,7 @@ import os
 import threading
 
 s = socket.socket()                                                 # создаем обьект сокета
-s.connect(('localhost', 4040))                                     # подключаемся к серваку
+s.connect(('127.0.0.1', 4040))                                      # подключаемся к серваку
 
 conf_file_path = 'D:\conf_f.txt'                                    # расположение конфиг файла
 
@@ -135,7 +135,6 @@ def main():
 
 set_settings()
 main()
-
 
 s.close() 
 
