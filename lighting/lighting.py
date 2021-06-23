@@ -51,6 +51,7 @@ def set_settings():                                                 #метод 
             elif count == 5: light = int(line.replace("\n",""))
             count += 1 
     else:
+        print("asdas")
         my_file = open(conf_file_path, "w+")
         my_file.close()
         set_settings()
