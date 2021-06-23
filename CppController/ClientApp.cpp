@@ -123,6 +123,7 @@ int main()
             WSACleanup();
             return 1;
         }
+        else { cout << "отправленно " << endl; }
 
         iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
         if (iResult > 0)
@@ -174,14 +175,14 @@ int main()
     }
     asd.push_back(settings);
     cout << "TEST" << endl;
-    T = std::stoi(asd[0]);
-    TsA = std::stoi(asd[1]);
-    TeA = std::stoi(asd[2]);
-    TsH = std::stoi(asd[3]);
-    TeH = std::stoi(asd[4]);
-    TH = std::stoi(asd[5]);
-    TL = std::stoi(asd[6]);
-    inter = std::stoi(asd[7]);
+    //T = std::stoi(asd[0]);
+    //TsA = std::stoi(asd[1]);
+    //TeA = std::stoi(asd[2]);
+    //TsH = std::stoi(asd[3]);
+    //TeH = std::stoi(asd[4]);
+    //TH = std::stoi(asd[5]);
+    //TL = std::stoi(asd[6]);
+    //inter = std::stoi(asd[7]);
    cout << T << " " << TsA << " " << TeA << " " << TsH << " " << TeH << " " << TH << " " << TL << endl;
 
     T = rand() % 13 + 10;
@@ -190,7 +191,7 @@ int main()
 
     for (int i = 0; i < 20; i++)
     {
-        Sleep(inter);
+        //Sleep(inter);
         command = prover + "|send_data|";
         
         if (T >= TsA && T<TH)
