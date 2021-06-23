@@ -158,6 +158,7 @@ namespace Client
                         {
                             string conttype = GetControllerType(msgstruct.guid);
                             string settings = GetContSettings(msgstruct.guid);
+                            settings += '\0';
                             switch (conttype)
                             {
                                 case "temperature":
