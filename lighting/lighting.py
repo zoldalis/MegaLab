@@ -24,7 +24,7 @@ fake_out_light = 0#X-X#
 sun_day_start = 0
 sun_day_end = 0
 
-get_id = False
+get_sett = False
 
 #execution_queue_arr                                                # очередь сообщений которые отослал сервер
 
@@ -98,8 +98,10 @@ def final_method_sending():
         last_time = time.time()
     
 def send_message():                                                 # метод отправки сообщения
-    s.sendall(construct(id,message))
+    s.sendall(construct(id,message,fake_time))
 
+def send_message_get_sett():
+    s.sendall(str.encode(id+'|'+"get_settings|"))
 def server_message_listener():                                      # метод чтения сообщений от сервера
     global sun_day_start
     global sun_day_end
@@ -108,17 +110,20 @@ def server_message_listener():                                      # метод
     while True:
         #execution_queue_arr.append(s.recv(1024).decode("utf-8"))
         quest = s.recv(1024).decode("utf-8")
-        if quest.find("id=") != -1:
-            id = (quest.replace("id=", ""))[:16]
+        if not get_sett:
+            settt =  quest.split('|')
+            sun_day_start = sett[0]
+            sunsun_day_end = sett[1]
             save_settings()
-            get_id = True
-        if get_id:
-            quest.replace("|","").replace("-","")
-            sun_day_start = quest.replace("|","").replace("-","")
+            get_sett = True
+        if get_sett:
+            quest = quest.replace("|","").replace("-","")
+            sun_day_start = int(quest)/100
+            sun_day_end = int(quest)%100
         time.sleep(5)
 
-def construct(id, message):                                         # метод преобразования id и параметров датчика в строку, затем в байты
-    return str.encode(id +'|'+ str(fake_out_light))
+def construct(id, message, fake_time):                                         # метод преобразования id и параметров датчика в строку, затем в байты
+    return str.encode(id +'|'+"send_data"+'|'+ str(fake_out_light)+'|'+ str(fake_time))
 
 def main():
     server_message_listener_thread = threading.Thread(target=server_message_listener) # создаем поток для приема сообщений
@@ -126,8 +131,11 @@ def main():
     global fake_time#X-X#
     global execution_queue_arr
 
+    while not get_sett:
+        send_message_get_sett()
+        time.sleep(5)
     while main_event:                                               # если main_event == False, заканчиваем цикл отправки сообщений и закрываем сокет
-        if get_id:
+        if get_sett:
             final_method_sending()
             get_controller_info()
             time.sleep(1)
