@@ -8,10 +8,10 @@ s = socket.socket()                                                 # созда
 s.connect(('127.0.0.1', 4040))                                      # подключаемся к серваку
 
 conf_file_path = 'D:\conf_f.txt'                                    # расположение конфиг файла
-
+#4AA95827-0199-4F82-9CC5-0FB36F1056D9
 full_message_by_byte = bytes('', 'utf-8')                                                # переменная
 message = ""
-id = ""                                ##################################################################
+id = "python-000000901"                                ##################################################################
 light = 0                                                             # флаг отвечающий за вкл\выкл свет
 main_event = True                                                   # флаг работы датчика
 
@@ -108,6 +108,7 @@ def server_message_listener():                                      # метод
     global get_id
     global id
     while True:
+        print("ждем сообщение")
         #execution_queue_arr.append(s.recv(1024).decode("utf-8"))
         quest = s.recv(1024).decode("utf-8")
         if not get_sett:
@@ -131,9 +132,10 @@ def main():
     global fake_time#X-X#
     global execution_queue_arr
 
-    while not get_sett:
+    while (get_sett == False):
+        print("запрос на настройки")
         send_message_get_sett()
-        time.sleep(5)
+        time.sleep(1)
     while main_event:                                               # если main_event == False, заканчиваем цикл отправки сообщений и закрываем сокет
         if get_sett:
             final_method_sending()
