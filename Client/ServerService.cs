@@ -149,10 +149,12 @@ namespace Client
                     string[] recmsg = cmd.Split('|');
 
                     msg_to_serv msgstruct = new msg_to_serv(recmsg[0], recmsg[1], recmsg[2]);
+                    
+                    Console.WriteLine($"received : {cmd}");
 
-
+                    bool ff = IsExistingGUID(msgstruct.guid);
                     //обрабатываем типы сообщений
-                    if (IsExistingGUID(msgstruct.guid))
+                    if (ff)
                     {
                         if (msgstruct.guid != "" && msgstruct.msgtype == "get_settings")
                         {
@@ -212,7 +214,6 @@ namespace Client
                     
 
 
-                    Console.WriteLine($"received : {cmd}");
 
 
 
@@ -239,14 +240,16 @@ namespace Client
             Controller cont = new Controller();
             cont.Id = guid;
             cont.Type = type;
-            cont.User = userlogin;
+            cont.User = userlogin; 
             _DBContext.Controllers.Add(cont);
         }
 
         public bool IsExistingGUID(string guid)
         {
-
-            if (_DBContext.Controllers.Find(guid) != null)
+            Controller contt = new Controller();
+            contt.Id = guid;
+            Controller cont = _DBContext.Controllers.Find(contt.Id);
+            if (cont != null)
                 return true;
             else
                 return false;
