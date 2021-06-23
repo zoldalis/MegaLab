@@ -21,20 +21,20 @@ int main()
 {
     using std::string;
     setlocale(LC_ALL, "Russian");
-    Sleep(10000);
+    Sleep(5000);
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
     struct addrinfo* result = NULL,
         * ptr = NULL,
         hints;
     char mes[1024];
-    int T = 23;
-    int TsA = 27;
-    int TeA = 17;
-    int TsH = 10;
-    int TeH = 20;
-    int TH = 30;
-    int TL = 9;
+    int T = 22;
+    int TsA = 10;
+    int TeA = 4;
+    int TsH = 5;
+    int TeH = 12;
+    int TH = 23;
+    int TL = 70;
     WCHAR guid[36];
     std::string sendbuf;
     char recvbuf[DEFAULT_BUFLEN];
@@ -89,21 +89,33 @@ int main()
         return 1;
     }
     //ЗАПРОС ГУИД
-
+    std::string settings = "";
     std::string prover = "";
     std::string line;
     std::ifstream in("test.txt"); // окрываем файл для чтения
     if (in.is_open())
     {
-        while (getline(in, line))
-        {
-            std::cout << line << endl;
+        getline(in, line);
+        
+            //std::cout << line << endl;
             prover = line;
-        }
+        
     }
     in.close();
+    std::ifstream iny("settings.txt"); // окрываем файл для чтения
+    if (iny.is_open())
+    {
+        getline(iny, line);
+
+        //std::cout << line << endl;
+        settings = line;
+
+    }
+    iny.close();
+    cout << settings << endl;
     std::cout << prover << endl;
-    
+    std::string take_settings;
+
     if (prover == "")
     {
         //запрос guid
@@ -119,7 +131,7 @@ int main()
         iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
         if (iResult > 0)
         {
-            printf(recvbuf);
+            //printf(recvbuf);
             for (int i = 0; i < 36; i++)
             {
                 guid[i] = recvbuf[i];
@@ -134,7 +146,7 @@ int main()
 
         wofstream f;
         f.open("test.txt");
-        f << guid;
+        f << guid << endl;
         f.close();
         std::ifstream ins("test.txt");
         if (ins.is_open())
@@ -146,41 +158,149 @@ int main()
             }
         }
         ins.close();
+
+
+        
     }
+    if(settings == "")
+    {
+        /*      take_settings = prover + "|get_settings|";
+        iResult = send(ConnectSocket, take_settings.c_str(), (int)strlen(take_settings.c_str()), 0);
+        if (iResult == SOCKET_ERROR) {
+            printf("send failed with error: %d\n", WSAGetLastError());
+            closesocket(ConnectSocket);
+            WSACleanup();
+            return 1;
+        }
+
+        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+        if (iResult > 0)
+        {
+            printf(recvbuf);
+           // take_settings = recvbuf;
+            printf("Bytes received: %d\n", iResult);
+
+        }
+        else if (iResult == 0)
+            printf("Connection closed\n");
+        else
+            printf("recv failed with error: %d\n", WSAGetLastError());
+*/
+        std::string asd = "23|27|17|10|20|30|10";
+        //recvbuf = asd;
+        ofstream fs;
+        fs.open("settings.txt", ios::app);
+        fs << asd;
+        fs.close();
+        std::ifstream insa("settings.txt");
+        if (insa.is_open())
+        {
+            while (getline(insa, line))
+            {
+                //std::cout << line << endl;
+                settings = line;
+            }
+        }
+        insa.close();
+    }
+    //string asdasd = "12";
+
+    //T = std::stoi(asdasd);
+    string h;
+    cout << T << endl;
+    int count = 0;
+    int count2 = 0;
+    cout << settings.size() << endl;
+   for (int i = 0; i < settings.size(); i++)
+    {
+        if (settings[i] == '|')
+        {
+            count++;
+        }
+        else
+        {
+            h += settings[i];
+            count2++;
+            if (count2 == 2 && count == 0)
+            {
+                T = std::stoi(h);
+                count2 = 0;
+                h = "";
+            }
+            if (count2 == 2 && count == 1)
+            {
+                TsA = std::stoi(h);
+                count2 = 0;
+                h = "";
+            }
+            if (count2 == 2 && count == 2)
+            {
+                TeA = std::stoi(h);
+                count2 = 0;
+                h = "";
+            }
+            if (count2 == 2 && count == 3)
+            {
+                TsH = std::stoi(h);
+                count2 = 0;
+                h = "";
+            }
+            if (count2 == 2 && count == 4)
+            {
+                TeH = std::stoi(h);
+                count2 = 0;
+                h = "";
+            }
+            if (count2 == 2 && count == 5)
+            {
+                TH = std::stoi(h);
+                count2 = 0;
+                h = "";
+            }
+            if (count2 == 2 && count == 6)
+            {
+                TL = std::stoi(h);
+                count2 = 0;
+                h = "";
+            }
+        }
+    }
+
+   cout << T << " " << TsA << " " << TeA << " " << TsH << " " << TeH << " " << TH << " " << TL << endl;
+
+
+
+
     T = rand() % 13 + 10;
     bool Flag = false;
     bool Flag2 = false;
-    bool FlagC = false;
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 20; i++)
     {
-
+       // Sleep(10000);
         command = prover + "|send_data|";
         
         if (T >= TsA && T<TH)
         {
             Flag = true;
             std::cout << "Начало проветривания " << T << endl;
-            FlagC = true;
             command += std::to_string(T);
-            T = T - rand() % 20 + 1;
+            T = T- 3;
             goto asd;
         }
-        else if (T < TsA && Flag == true && T> TeA)
+        if (T < TsA && Flag == true && T> TeA)
         {
             std::cout << "Продолжается проветривание " << T << endl;
-            FlagC = true;
             command += std::to_string(T);
-            T = T - rand() % 17 + 1;
+            T = T - 4;
             goto asd;
         }
-        else if (T <= TeA && Flag == true)
+        if (T <= TeA && Flag == true)
         {
             std::cout << "Проветривание закончено " << T << endl;
             Flag = false;
-            FlagC = true;
             command += std::to_string(T);
-            T = rand() % 10 + 1;
+            T = T + 2;
             goto asd;
         }
 
@@ -188,15 +308,13 @@ int main()
         {
             std::cout << "Начало подогрева " << T << endl;
             Flag2 = true;
-            FlagC = true;
             command += std::to_string(T);
-            T = rand() % 15 + T;
+            T = rand() % 10 + T;
             goto asd;
         }
         if (T > TsH && Flag2 == true && T<TeH)
         {
             std::cout << "Продолжается подогрев " << T << endl;
-            FlagC = true;
             command += std::to_string(T);
             T = rand() % 10 + T;
             
@@ -205,7 +323,6 @@ int main()
         if (T >= TeH && Flag2 == true)
         {
             Flag2 = false;
-            FlagC = true;
             command += std::to_string(T);
             std::cout << "Подогрев закончен " << T << endl;
             T = rand() % 10 + T;
@@ -214,31 +331,24 @@ int main()
         if (T >= TH)
         {
             std::cout << "Предельно большая температура, отправка смс " << T << endl;
-            FlagC = true;
             command += std::to_string(T);
-            T = rand() % 10 + 10;
+            T = rand() % 5 + 20;
             goto asd;
         }
         if (T <= TL)
         {
             std::cout << "Предельно низкая теспература, отправка смс " << T << endl;
-            FlagC = true;
             command += std::to_string(T);
-            T = rand() % 15 + 15;
+            T = rand() % 5 + 10;
             goto asd;
         }
         if (T < 27 && T>10)
         {
             std::cout << "Нормальная температура " << T << endl;
-            
+            command += std::to_string(T);
+             T = T + 3;
         }
     asd:
-        if (FlagC == false)
-        {
-        command += std::to_string(T);
-        }
-        FlagC = false;
-        
         std::cout << command << " Command to send" << endl;
         iResult = send(ConnectSocket, command.c_str(), (int)strlen(command.c_str()), 0);
         if (iResult == SOCKET_ERROR) {
@@ -249,7 +359,7 @@ int main()
         }
 
         printf("Bytes Sent: %ld\n", iResult);
-        T = T + 5;
+       
     }
 
     // shutdown the connection since no more data will be sent
