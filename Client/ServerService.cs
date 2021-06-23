@@ -149,68 +149,66 @@ namespace Client
                     string[] recmsg = cmd.Split('|');
 
                     msg_to_serv msgstruct = new msg_to_serv(recmsg[0], recmsg[1], recmsg[2]);
-                    
-                    
+
+
                     //обрабатываем типы сообщений
-                    if (msgstruct.guid == "" && msgstruct.msgtype=="get_guid")
+                    if (IsExistingGUID(msgstruct.guid))
                     {
-                        string newguid = GenerateGuid();
-                        newguid += '\0';
-                        stream.WriteAsync(Encoding.UTF8.GetBytes(newguid), 0, newguid.Length);
-                    }
-                    if (msgstruct.guid != "" && msgstruct.msgtype == "get_settings")
-                    {
-                        string conttype = GetControllerType(msgstruct.guid);
-
-                        switch (conttype)
+                        if (msgstruct.guid != "" && msgstruct.msgtype == "get_settings")
                         {
-                            case "temperature":
-                                {
-                                    msg_to_temp_cont to_t = new msg_to_temp_cont();
-                                    
-                                    string msg_to_send = to_t.ToString();
-                                    stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                            string conttype = GetControllerType(msgstruct.guid);
+                            string settings = GetContSettings(msgstruct.guid);
+                            switch (conttype)
+                            {
+                                case "temperature":
+                                    {
+                                        msg_to_temp_cont to_t = new msg_to_temp_cont();
+
+                                        string msg_to_send = settings;
+                                        stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                                        break;
+                                    }
+                                case "pressure":
+                                    {
+                                        msg_to_temp_cont to_t = new msg_to_temp_cont();
+                                        string msg_to_send = settings;
+                                        stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                                        break;
+                                    }
+                                case "lightning":
+                                    {
+                                        msg_to_temp_cont to_t = new msg_to_temp_cont();
+                                        string msg_to_send = settings;
+                                        stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                                        break;
+                                    }
+                                case "movement":
+                                    {
+                                        msg_to_temp_cont to_t = new msg_to_temp_cont();
+                                        string msg_to_send = settings;
+                                        stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                                        break;
+                                    }
+                                case "humidity":
+                                    {
+                                        msg_to_temp_cont to_t = new msg_to_temp_cont();
+                                        string msg_to_send = settings;
+                                        stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                                        break;
+                                    }
+                                default:
                                     break;
-                                }
-                            case "pressure":
-                                {
-                                    msg_to_temp_cont to_t = new msg_to_temp_cont();
-                                    string msg_to_send = to_t.ToString();
-                                    stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                                    break;
-                                }
-                            case "lightning":
-                                {
-                                    msg_to_temp_cont to_t = new msg_to_temp_cont();
-                                    string msg_to_send = to_t.ToString();
-                                    stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                                    break;
-                                }
-                            case "movement":
-                                {
-                                    msg_to_temp_cont to_t = new msg_to_temp_cont();
-                                    string msg_to_send = to_t.ToString();
-                                    stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                                    break;
-                                }
-                            case "humidity":
-                                {
-                                    msg_to_temp_cont to_t = new msg_to_temp_cont();
-                                    string msg_to_send = to_t.ToString();
-                                    stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                                    break;
-                                }
-                            default:
-                                break;
+                            }
+
+
                         }
-
-
+                        if (msgstruct.guid != "" && msgstruct.msgtype == "send_data")
+                        {
+                            Console.WriteLine($"method send_data - received : {cmd}");
+                        }
                     }
 
-                    if (msgstruct.guid != "" && msgstruct.msgtype == "send_data")
-                    {
-                        
-                    }
+                    
 
 
                     Console.WriteLine($"received : {cmd}");
@@ -244,13 +242,20 @@ namespace Client
             _DBContext.Controllers.Add(cont);
         }
 
-        public string GenerateGuid()
+        public bool IsExistingGUID(string guid)
         {
-            Guid guid = Guid.NewGuid();
-            return guid.ToString();
+
+            if (_DBContext.Controllers.Find(guid) != null)
+                return true;
+            else
+                return false;
+
         }
 
-
+        public string GetContSettings(string guid)
+        {
+            return _DBContext.Controllers.Find(guid).Settings;
+        }
 
         //public void MSGHandle(string msg)
         //{
