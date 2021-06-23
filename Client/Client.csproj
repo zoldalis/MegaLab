@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.cs" />
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210531184703_Controllers.cs" />
+    <Compile Remove="Data\Migrations\20210531184703_Controllers.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210622142752_Controllers2.cs" />
+    <Compile Remove="Data\Migrations\20210622142752_Controllers2.Designer.cs" />
     <Compile Remove="Data\Models\Controller.cs" />
     <Compile Remove="HumidityController.cs" />
   </ItemGroup>
@@ -24,6 +30,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Npgsql" Version="5.0.5" />
   </ItemGroup>
 

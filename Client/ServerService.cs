@@ -17,47 +17,84 @@ namespace Client
 
         struct msg_to_serv
         {
-            byte[] id;
-            byte[] msg;
-            msg_to_serv(byte[] Id, byte[] Msg)
+            public string guid;
+            public string msgtype;
+            public string msg;
+
+            public msg_to_serv(string Guid, string Msgtype, string Msg)
             {
-                id = Id;
+                guid = Guid;
+                msgtype = Msgtype;
                 msg = Msg;
+
             }
         }
 
-        struct msg_to_temp_cont
+        public struct msg_to_temp_cont
         {
-            int sendinterval;
+            public int sendinterval;
 
             public override string ToString()
             {
                 return sendinterval.ToString();
             }
+            public msg_to_temp_cont(int sendint)
+            {
+                sendinterval = sendint;
+            }
         }
 
         struct msg_to_humi_cont
         {
-            int sendinterval;
+            public int sendinterval;
+            public override string ToString()
+            {
+                return sendinterval.ToString();
+            }
 
+            public msg_to_humi_cont(int sendint)
+            {
+                sendinterval = sendint;
+            }
         }
 
         struct msg_to_light_cont
         {
-            int sendinterval;
-
+            public int sendinterval;
+            public override string ToString()
+            {
+                return sendinterval.ToString();
+            }
+            public msg_to_light_cont(int sendint)
+            {
+                sendinterval = sendint;
+            }
         }
 
         struct msg_to_bar_cont
         {
-            int sendinterval;
-
+            public int sendinterval;
+            public override string ToString()
+            {
+                return sendinterval.ToString();
+            }
+            public msg_to_bar_cont(int sendint)
+            {
+                sendinterval = sendint;
+            }
         }
 
         struct msg_to_move_cont
         {
-            int sendinterval;
-
+            public int delay;
+            public override string ToString()
+            {
+                return delay.ToString();
+            }
+            public msg_to_move_cont(int sendint)
+            {
+                delay = sendint;
+            }
         }
 
         private readonly ApplicationDbContext _DBContext;
@@ -106,15 +143,77 @@ namespace Client
 
                     //тут нужно реализовать логику обработки данных которые нам передали, распарсить их, понять когда нам передали guid, а когда собщение с данными датчика например
 
-                    //if (cmd == "")
-                    //{
+
+                    //разбиваем полученное сообщение на структуру
+
+                    string[] recmsg = cmd.Split('|');
+
+                    msg_to_serv msgstruct = new msg_to_serv(recmsg[0], recmsg[1], recmsg[2]);
+                    
+                    
+                    //обрабатываем типы сообщений
+                    if (msgstruct.guid == "" && msgstruct.msgtype=="get_guid")
+                    {
                         string newguid = GenerateGuid();
+                        newguid += '\0';
                         stream.WriteAsync(Encoding.UTF8.GetBytes(newguid), 0, newguid.Length);
-                    //}
+                    }
+                    if (msgstruct.guid != "" && msgstruct.msgtype == "get_settings")
+                    {
+                        string conttype = GetControllerType(msgstruct.guid);
+
+                        switch (conttype)
+                        {
+                            case "temperature":
+                                {
+                                    msg_to_temp_cont to_t = new msg_to_temp_cont();
+                                    
+                                    string msg_to_send = to_t.ToString();
+                                    stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                                    break;
+                                }
+                            case "pressure":
+                                {
+                                    msg_to_temp_cont to_t = new msg_to_temp_cont();
+                                    string msg_to_send = to_t.ToString();
+                                    stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                                    break;
+                                }
+                            case "lightning":
+                                {
+                                    msg_to_temp_cont to_t = new msg_to_temp_cont();
+                                    string msg_to_send = to_t.ToString();
+                                    stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                                    break;
+                                }
+                            case "movement":
+                                {
+                                    msg_to_temp_cont to_t = new msg_to_temp_cont();
+                                    string msg_to_send = to_t.ToString();
+                                    stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                                    break;
+                                }
+                            case "humidity":
+                                {
+                                    msg_to_temp_cont to_t = new msg_to_temp_cont();
+                                    string msg_to_send = to_t.ToString();
+                                    stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                                    break;
+                                }
+                            default:
+                                break;
+                        }
+
+
+                    }
+
+                    if (msgstruct.guid != "" && msgstruct.msgtype == "send_data")
+                    {
+                        
+                    }
+
 
                     Console.WriteLine($"received : {cmd}");
-
-
 
 
 
@@ -150,6 +249,7 @@ namespace Client
             Guid guid = Guid.NewGuid();
             return guid.ToString();
         }
+
 
 
         //public void MSGHandle(string msg)

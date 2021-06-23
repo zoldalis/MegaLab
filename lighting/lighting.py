@@ -115,7 +115,7 @@ def server_message_listener():                                      # метод
         if get_id:
             quest.replace("|","").replace("-","")
             sun_day_start = quest.replace("|","").replace("-","")
-        time.sleep(0.5)
+        time.sleep(5)
 
 def construct(id, message):                                         # метод преобразования id и параметров датчика в строку, затем в байты
     return str.encode(id +'|'+ str(fake_out_light))
