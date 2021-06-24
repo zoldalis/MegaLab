@@ -11,7 +11,7 @@ namespace Client
     {
 
 
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             System.Threading.Thread.Sleep(5000);
             try
@@ -21,8 +21,8 @@ namespace Client
                 // Note, for this client to work you need to have a TcpServer
                 // connected to the same address as specified by the server, port
                 // combination.
-                Int32 port = 4040;
-                TcpClient client = new TcpClient("127.0.0.1", port);
+                int port = 4040;
+                
 
                 // Get a client stream for reading and writing.
                 //  Stream stream = client.GetStream();
@@ -52,7 +52,7 @@ namespace Client
                 using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
                 {
                     string line;
-                    while ((line = await sr.ReadLineAsync()) != null)
+                    while ((line = sr.ReadLine()) != null)
                     {
                        // Console.WriteLine(line);
                         GUID = line;
@@ -66,7 +66,7 @@ namespace Client
                 using (StreamReader sr = new StreamReader(path2, System.Text.Encoding.Default))
                 {
                     string line;
-                    while ((line = await sr.ReadLineAsync()) != null)
+                    while ((line = sr.ReadLine()) != null)
                     {
                         // Console.WriteLine(line);
                         settings = line;
@@ -100,10 +100,13 @@ namespace Client
                 Console.WriteLine(" H = " + H + " HS = " + HS + " HE = " + HE + " inter = " + inter);
                 bool flag = false;
                 string message = "";
-                NetworkStream stream = client.GetStream();
+                
                 for (int i = 0; i < 20; i++)
                 {
+                    TcpClient client = new TcpClient("127.0.0.1", port);
+                    NetworkStream stream = client.GetStream();
                     System.Threading.Thread.Sleep(inter);
+                    
                     if (H <= HS && flag == false)
                     {
                         Console.WriteLine("Начало полива. Влажность = " + H);
@@ -132,7 +135,7 @@ namespace Client
                     }
 
                     
-                    Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
+                    byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
                     
 
                     // Send the message to the connected TcpServer.
@@ -154,10 +157,11 @@ namespace Client
                     //Console.WriteLine("Received: {0}", responseData);
 
                     // Close everything.
-                    
-                }
-                stream.Close();
+                    stream.Close();
                     client.Close();
+                }
+                
+                   
 
                 
             }
