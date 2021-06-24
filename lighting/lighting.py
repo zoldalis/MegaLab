@@ -109,14 +109,16 @@ def server_message_listener():                                      # метод
     global sun_day_end
     global get_id
     global id
+    global get_sett
     while True:
-        print("ждем сообщение")
-        #execution_queue_arr.append(s.recv(1024).decode("utf-8"))
-        quest = s.recv(1024).decode("utf-8")
-        if get_sett == False:
+        if(get_sett == False):
+            
+            print("ждем сообщение")
+            #execution_queue_arr.append(s.recv(1024).decode("utf-8"))
+            quest = s.recv(1024).decode("utf-8")
             settt =  quest.split('|')
-            sun_day_start = sett[0]
-            sunsun_day_end = sett[1]
+            sun_day_start = settt[0]
+            sunsun_day_end = settt[1]
             save_settings()
             get_sett = True
         
@@ -130,7 +132,7 @@ def main():
     server_message_listener_thread.start()                                            # запускаем его
     global fake_time#X-X#
     global execution_queue_arr
-
+    global get_sett
     while (get_sett == False):
         print("запрос на настройки")
         send_message_get_sett()
