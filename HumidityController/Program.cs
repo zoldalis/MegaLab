@@ -32,6 +32,8 @@ namespace Client
                 string settings = "";
                 string GUID = "";
                 int H,HS, HE, inter;
+                TcpClient client = new TcpClient("127.0.0.1", port);
+                    NetworkStream stream = client.GetStream();
                 /*try
                 {//ЗАПИСЬ В ФАЙЛ
                     // Create the file, or overwrite if the file exists.
@@ -73,14 +75,37 @@ namespace Client
                     }
                 }
                 Console.WriteLine("SETTINGS = " + settings);
+                string message2 = GUID + "|get_settings|";
                 if (settings == "")
                 {
+                    byte[] data = System.Text.Encoding.ASCII.GetBytes(message2);
+
+
+                    // Send the message to the connected TcpServer.
+                    stream.Write(data, 0, data.Length);
+
+                    Console.WriteLine("Sent: {0}", message2);
+
+                     //Receive the TcpServer.response.
+
+                     //Buffer to store the response bytes.
+                    Byte[] data2 = new Byte[256];
+                    System.Threading.Thread.Sleep(500);
+                    // String to store the response ASCII representation.
+                    String responseData = String.Empty;
+
+                    // Read the first batch of the TcpServer response bytes.
+                    Int32 bytes = stream.Read(data2, 0, data2.Length);
+                    responseData = System.Text.Encoding.ASCII.GetString(data2, 0, bytes);
+                    Console.WriteLine("Received: {0}", responseData);
+
+                    settings = responseData;
                     try
                     {//ЗАПИСЬ В ФАЙЛ
                      // Create the file, or overwrite if the file exists.
                         using (FileStream fs = File.Create(path2))
                         {
-                            byte[] info = new UTF8Encoding(true).GetBytes("40|70|500");
+                            byte[] info = new UTF8Encoding(true).GetBytes(settings);
                             // Add some information to the file.
                             fs.Write(info, 0, info.Length);
                         }
@@ -103,8 +128,7 @@ namespace Client
                 
                 for (int i = 0; i < 20; i++)
                 {
-                    TcpClient client = new TcpClient("127.0.0.1", port);
-                    NetworkStream stream = client.GetStream();
+                    
                     System.Threading.Thread.Sleep(inter);
                     
                     if (H <= HS && flag == false)
@@ -157,12 +181,12 @@ namespace Client
                     //Console.WriteLine("Received: {0}", responseData);
 
                     // Close everything.
-                    stream.Close();
-                    client.Close();
+                    
                 }
                 
                    
-
+                    stream.Close();
+                    client.Close();
                 
             }
             catch (ArgumentNullException e)
