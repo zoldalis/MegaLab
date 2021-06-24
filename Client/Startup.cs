@@ -30,7 +30,7 @@ namespace Client
             
 
 
-            services.AddSingleton<Controller>();
+            //services.AddSingleton<Controller>();
 
            
 
@@ -39,8 +39,9 @@ namespace Client
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Singleton);
             services.AddDatabaseDeveloperPageExceptionFilter();
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();

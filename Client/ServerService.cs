@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
+using System.Linq;
 //{0-8}{9-1023}
 namespace Client
 {
@@ -116,7 +117,7 @@ namespace Client
         }
 
 
-        
+
         //создание экземпляра сервера
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -149,7 +150,7 @@ namespace Client
                     string[] recmsg = cmd.Split('|');
 
                     msg_to_serv msgstruct = new msg_to_serv(recmsg[0], recmsg[1], recmsg[2]);
-                    
+
                     Console.WriteLine($"received : {cmd}");
 
                     bool ff = IsExistingGUID(msgstruct.guid);
@@ -211,7 +212,7 @@ namespace Client
                         }
                     }
 
-                    
+
 
 
 
@@ -235,20 +236,23 @@ namespace Client
 
 
         //добавление контроллера в базу, по клиентскому запросу(кнопка добавить на сайте)
-        public void AddNewControler(string guid,string type,string userlogin)
+        public void AddNewControler(string guid, string type, string userlogin)
         {
             Controller cont = new Controller();
             cont.Id = guid;
             cont.Type = type;
-            cont.User = userlogin; 
+            cont.User = userlogin;
             _DBContext.Controllers.Add(cont);
         }
 
         public bool IsExistingGUID(string guid)
         {
-            Controller contt = new Controller();
-            contt.Id = guid;
-            Controller cont = _DBContext.Controllers.Find(contt.Id);
+            //Controller cont = _DBContext.Controllers
+            //                .Where(b => b.Id == guid)
+            //                .FirstOrDefault();
+
+            Controller cont = _DBContext.Controllers.Find(guid);
+
             if (cont != null)
                 return true;
             else
