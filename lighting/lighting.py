@@ -113,16 +113,13 @@ def server_message_listener():                                      # метод
         print("ждем сообщение")
         #execution_queue_arr.append(s.recv(1024).decode("utf-8"))
         quest = s.recv(1024).decode("utf-8")
-        if not get_sett:
+        if get_sett == False:
             settt =  quest.split('|')
             sun_day_start = sett[0]
             sunsun_day_end = sett[1]
             save_settings()
             get_sett = True
-        if get_sett:
-            quest = quest.replace("|","").replace("-","")
-            sun_day_start = int(quest)/100
-            sun_day_end = int(quest)%100
+        
         time.sleep(5)
 
 def construct(id, message, fake_time):                                         # метод преобразования id и параметров датчика в строку, затем в байты
