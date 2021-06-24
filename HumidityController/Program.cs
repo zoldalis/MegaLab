@@ -10,89 +10,197 @@ namespace Client
     class Program
     {
 
-        // Функция запрашивает строку, конвертирует ее в тип Т и валидирует выходные данные
-        private static T Promt<T>(string promt, // Сообщение
-            Predicate<T> validation = null, // Функция валидации, принимает аргумент типа Т и возвращает true/false (необязательний аргумент)
-            string errorMessage = null // Сообщение в случае ошибки (необязятельный аргумент)
-        )
-        {
-            T result;
-            while (true)
-            {
-                Console.Write(promt);
-                try
-                {
-                    IConvertible res = Console.ReadLine(); // Считываем строку как тип IConvertible
-                    result = (T)res.ToType(typeof(T), null); // Попытка сконвертировать строку в тип Т 
-                }
-                catch (FormatException e)
-                {
-                    // Если произошла ошибка
-                    Console.WriteLine(errorMessage ?? e.Message); // выводим сообщение об ошибке
-                    continue; // и продолжаем цикл
-                }
 
-                if (validation == null || validation(result)) // Если функция валидации не задана или возвращает истину
-                {
-                    break; // Выходим из цикла
-                }
-                else
-                {
-                    Console.WriteLine(errorMessage ?? "Введенная строка невалидна!");
-                }
-            }
-            return result;
-        }
-
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
-            const int port = 4040;
-            IPAddress localAddr = IPAddress.Parse("127.0.0.1");  // Адрес сервера (адрес локального компьютера - 127.0.0.1) 
-            TcpClient client = new TcpClient();
+            System.Threading.Thread.Sleep(5000);
             try
             {
-                //client.Connect(address, portNumber); // Подключение к серверу
-            }
-            catch (Exception) // Если произошла ошибка 
-            {
-                Console.WriteLine("Не удалось подключиться к серверу"); // Выводим сообщение
-                return; // Завераем выполнение программы
-            }
+                
+                // Create a TcpClient.
+                // Note, for this client to work you need to have a TcpServer
+                // connected to the same address as specified by the server, port
+                // combination.
+                int port = 4040;
+                
 
-            var stream = client.GetStream(); // Открываем сетевой поток
-            client.ReceiveBufferSize = 1024; // Устанавливаем размер буфера
+                // Get a client stream for reading and writing.
+                //  Stream stream = client.GetStream();
 
-            var buffer = new byte[client.ReceiveBufferSize]; // Создание буффера
-            var lengthBuffer = new byte[8]; // дополниетльный буффер
-
-            try
-            {
-                while (client.Connected)
-                {
-
-                    await stream.ReadAsync(lengthBuffer, 0, lengthBuffer.Length); // Считываем длину файла в массив байт        
-                    var size = BitConverter.ToInt64(lengthBuffer, 0); // конвертируем массив байт в число типа long
-
-                    stream.WriteByte(1); // Подтверждаем загрузку файла
-                    await stream.ReadAsync(lengthBuffer, 0, lengthBuffer.Length); //Считываем длину файла
-                    var c = await stream.ReadAsync(buffer, 0, (int)BitConverter.ToInt64(lengthBuffer, 0)); // Считываем название файла
-                    var name = Encoding.Unicode.GetString(buffer, 0, c); // Конвертирем массив байт в строку
-                    var fs = File.OpenWrite(name); // Открываем/создаем файл
-                    long readed = 0; // К-во считаных байт
-                    while (readed < size) // Пока к-во считаных байт меньше размера файла
+                string path = @"GUID.txt";
+                string path2 = @"settings.txt";
+                string settings = "";
+                string GUID = "";
+                int H,HS, HE, inter;
+                TcpClient client = new TcpClient("127.0.0.1", port);
+                    NetworkStream stream = client.GetStream();
+                /*try
+                {//ЗАПИСЬ В ФАЙЛ
+                    // Create the file, or overwrite if the file exists.
+                    using (FileStream fs = File.Create(path))
                     {
-                            var count = await stream.ReadAsync(buffer, 0, buffer.Length); // Читаем кусок из сетевого потока
-                            readed += count;
-                            await fs.WriteAsync(buffer, 0, count); // Записываем считаное в файл
+                        byte[] info = new UTF8Encoding(true).GetBytes("be1d78b9-46ac-4bb7-b93f-6b90a30a612b");
+                        // Add some information to the file.
+                        fs.Write(info, 0, info.Length);
                     }
-                    fs.Close(); // Закрываем файл
-                    Console.WriteLine($"Файл {name} сохранен");
+
+                    
                 }
+
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }*/
+                using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                       // Console.WriteLine(line);
+                        GUID = line;
+                    }
+                }
+                Console.WriteLine("GUID = " + GUID);
+
+
+                
+
+                using (StreamReader sr = new StreamReader(path2, System.Text.Encoding.Default))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        // Console.WriteLine(line);
+                        settings = line;
+                    }
+                }
+                Console.WriteLine("SETTINGS = " + settings);
+                string message2 = GUID + "|get_settings|";
+                if (settings == "")
+                {
+                    byte[] data = System.Text.Encoding.ASCII.GetBytes(message2);
+
+
+                    // Send the message to the connected TcpServer.
+                    stream.Write(data, 0, data.Length);
+
+                    Console.WriteLine("Sent: {0}", message2);
+
+                     //Receive the TcpServer.response.
+
+                     //Buffer to store the response bytes.
+                    Byte[] data2 = new Byte[256];
+                    System.Threading.Thread.Sleep(500);
+                    // String to store the response ASCII representation.
+                    String responseData = String.Empty;
+
+                    // Read the first batch of the TcpServer response bytes.
+                    Int32 bytes = stream.Read(data2, 0, data2.Length);
+                    responseData = System.Text.Encoding.ASCII.GetString(data2, 0, bytes);
+                    Console.WriteLine("Received: {0}", responseData);
+
+                    settings = responseData;
+                    try
+                    {//ЗАПИСЬ В ФАЙЛ
+                     // Create the file, or overwrite if the file exists.
+                        using (FileStream fs = File.Create(path2))
+                        {
+                            byte[] info = new UTF8Encoding(true).GetBytes(settings);
+                            // Add some information to the file.
+                            fs.Write(info, 0, info.Length);
+                        }
+                    }
+
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                }
+
+                string[] words = settings.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                H = Convert.ToInt32(words[0]);
+                HS = Convert.ToInt32(words[1]);
+                HE = Convert.ToInt32(words[2]);
+                inter = Convert.ToInt32(words[3]);
+                Console.WriteLine(" H = " + H + " HS = " + HS + " HE = " + HE + " inter = " + inter);
+                bool flag = false;
+                string message = "";
+                
+                for (int i = 0; i < 20; i++)
+                {
+                    
+                    System.Threading.Thread.Sleep(inter);
+                    
+                    if (H <= HS && flag == false)
+                    {
+                        Console.WriteLine("Начало полива. Влажность = " + H);
+                        message = GUID + "|send_data|" + H;
+                        H += 3;
+                        flag = true;
+                    }
+                    else if (flag == true && H<HE)
+                    {
+                        Console.WriteLine("Идет полив. Влажность = " + H);
+                        message = GUID + "|send_data|" + H;
+                        H += 3;
+                    }
+                    else if (flag == true && H >= HE)
+                    {
+                        Console.WriteLine("Конец полива. Влажность = " + H);
+                        message = GUID + "|send_data|" + H;
+                        H += 3;
+                        flag = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Влажность в норме. Влажность = " + H);
+                        message = GUID + "|send_data|" + H;
+                        H -= 5;
+                    }
+
+                    
+                    byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
+                    
+
+                    // Send the message to the connected TcpServer.
+                    stream.Write(data, 0, data.Length);
+
+                    Console.WriteLine("Sent: {0}", message);
+
+                    // Receive the TcpServer.response.
+
+                    // Buffer to store the response bytes.
+                    //Byte[] data2 = new Byte[256];
+
+                    // String to store the response ASCII representation.
+                    //String responseData = String.Empty;
+
+                    // Read the first batch of the TcpServer response bytes.
+                    //Int32 bytes = stream.Read(data2, 0, data2.Length);
+                    //responseData = System.Text.Encoding.ASCII.GetString(data2, 0, bytes);
+                    //Console.WriteLine("Received: {0}", responseData);
+
+                    // Close everything.
+                    
+                }
+                
+                   
+                    stream.Close();
+                    client.Close();
+                
             }
-            catch (SocketException) // Если сервер отключился
+            catch (ArgumentNullException e)
             {
-                Console.WriteLine("Сервер прервал соединие"); // Вывод сообщения
+                Console.WriteLine("ArgumentNullException: {0}", e);
             }
+            catch (SocketException e)
+            {
+                Console.WriteLine("SocketException: {0}", e);
+            }
+          Console.WriteLine("\n Press Enter to continue...");
+            Console.Read();
+
+
 
         }
     }

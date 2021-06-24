@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
+using System.Linq;
 //{0-8}{9-1023}
 namespace Client
 {
@@ -116,7 +117,7 @@ namespace Client
         }
 
 
-        
+
         //создание экземпляра сервера
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -150,9 +151,11 @@ namespace Client
 
                     msg_to_serv msgstruct = new msg_to_serv(recmsg[0], recmsg[1], recmsg[2]);
 
+                    Console.WriteLine($"received : {cmd}");
 
+                    bool ff = IsExistingGUID(msgstruct.guid);
                     //обрабатываем типы сообщений
-                    if (IsExistingGUID(msgstruct.guid))
+                    if (ff)
                     {
                         if (msgstruct.guid != "" && msgstruct.msgtype == "get_settings")
                         {
@@ -209,10 +212,9 @@ namespace Client
                         }
                     }
 
-                    
 
 
-                    Console.WriteLine($"received : {cmd}");
+
 
 
 
@@ -234,7 +236,7 @@ namespace Client
 
 
         //добавление контроллера в базу, по клиентскому запросу(кнопка добавить на сайте)
-        public void AddNewControler(string guid,string type,string userlogin)
+        public void AddNewControler(string guid, string type, string userlogin)
         {
             Controller cont = new Controller();
             cont.Id = guid;
@@ -245,8 +247,13 @@ namespace Client
 
         public bool IsExistingGUID(string guid)
         {
+            //Controller cont = _DBContext.Controllers
+            //                .Where(b => b.Id == guid)
+            //                .FirstOrDefault();
 
-            if (_DBContext.Controllers.Find(guid) != null)
+            Controller cont = _DBContext.Controllers.Find(guid);
+
+            if (cont != null)
                 return true;
             else
                 return false;
