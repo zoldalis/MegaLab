@@ -1,0 +1,41 @@
+@*@page
+    @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+    @{
+        var myChart = new Chart(width: 600, height: 400)
+            .AddTitle("Chart Title")
+            .AddSeries(
+                name: "Employee",
+                xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "Dave" },
+                yValues: new[] { "2", "6", "4", "5", "3" })
+            .Write();
+    }*@
+
+
+
+
+@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model Client.Pages.ChartModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="//cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+
+    <script src="//cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+    <title>ColumnChart</title>
+</head>
+
+<body>
+    <form method="post">
+        <div>@Html.Raw(Model.ChartJson)</div>
+        <br />
+    </form>
+</body>
+</html>

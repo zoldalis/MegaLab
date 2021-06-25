@@ -159,55 +159,57 @@ namespace Client
                     {
                         if (msgstruct.guid != "" && msgstruct.msgtype == "get_settings")
                         {
-                            string conttype = GetControllerType(msgstruct.guid);
                             string settings = GetContSettings(msgstruct.guid);
                             settings += '\0';
-                            switch (conttype)
-                            {
-                                case "temperature":
-                                    {
-                                        msg_to_temp_cont to_t = new msg_to_temp_cont();
-
-                                        string msg_to_send = settings;
-                                        stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                                        break;
-                                    }
-                                case "pressure":
-                                    {
-                                        msg_to_temp_cont to_t = new msg_to_temp_cont();
-                                        string msg_to_send = settings;
-                                        stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                                        break;
-                                    }
-                                case "lightning":
-                                    {
-                                        msg_to_temp_cont to_t = new msg_to_temp_cont();
-                                        string msg_to_send = settings;
-                                        stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                                        break;
-                                    }
-                                case "movement":
-                                    {
-                                        msg_to_temp_cont to_t = new msg_to_temp_cont();
-                                        string msg_to_send = settings;
-                                        stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                                        break;
-                                    }
-                                case "humidity":
-                                    {
-                                        msg_to_temp_cont to_t = new msg_to_temp_cont();
-                                        string msg_to_send = settings;
-                                        stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                                        break;
-                                    }
-                                default:
-                                    break;
-                            }
-
-
+                            string msg_to_send = settings;
+                            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
                         }
                         if (msgstruct.guid != "" && msgstruct.msgtype == "send_data")
                         {
+                            string conttype = GetControllerType(msgstruct.guid);
+                            _DBContext.Controllers.Find(msgstruct.guid).Values.Add(msgstruct.msg);
+                            //switch (conttype)
+                            //{
+                            //    
+                            //    case "temperature":
+                            //        {
+
+                            //            string msg_to_send = settings;
+                            //            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                            //            break;
+                            //        }
+                            //    case "pressure":
+                            //        {
+
+                            //            string msg_to_send = settings;
+                            //            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                            //            break;
+                            //        }
+                            //    case "lightning":
+                            //        {
+
+                            //            string msg_to_send = settings;
+                            //            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                            //            break;
+                            //        }
+                            //    case "movement":
+                            //        {
+
+                            //            string msg_to_send = settings;
+                            //            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                            //            break;
+                            //        }
+                            //    case "humidity":
+                            //        {
+
+                            //            string msg_to_send = settings;
+                            //            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+                            //            break;
+                            //        }
+                            //    default:
+                            //        break;
+                            //}
+
                             Console.WriteLine($"method send_data - received : {cmd}");
                         }
                     }
@@ -264,6 +266,9 @@ namespace Client
         {
             return _DBContext.Controllers.Find(guid).Settings;
         }
+
+        
+
 
         //public void MSGHandle(string msg)
         //{

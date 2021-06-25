@@ -29,7 +29,9 @@ namespace Client.Pages
         [BindProperty]
         public Client.Data.Controller Controller { get; set; }
 
-        public string username = "";
+        public static string username = "";
+
+        public string type { get; set; }
 
         //[BindProperty]
         //public 
@@ -44,6 +46,8 @@ namespace Client.Pages
 
             Controller.User = username;
 
+            type = Controller.Type;
+
             if (Controller.Type == "Датчик Температуры")
                 Controller.Type = "temperature";
             else if (Controller.Type == "Датчик Давления")
@@ -57,8 +61,8 @@ namespace Client.Pages
             else 
                 return RedirectToPage("./AddController");
 
-
-            _context.Controllers.Add(Controller);
+            if(_context.Controllers.Find(Controller.Id) == null)
+                _context.Controllers.Add(Controller);
             
             await _context.SaveChangesAsync();
 

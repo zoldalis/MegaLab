@@ -37,6 +37,7 @@ namespace Client
             //services.AddScoped<IServerService, ServerService>();
             services.AddHostedService<ServerService>();
 
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Singleton);
