@@ -33,5 +33,5 @@ client.on('data', function (data) {
 });
 client.on('close', function () {
 	console.log('Connection closed');													// событие закрытия подключения
-	fs.writeFileSync("settings.txt", guid + "\n" + time_delay + "\n" + sensitivity)     // при закрытии подключения записываем переменные в файл
+	fs.writeFileSync("settings.txt", guid)     // при закрытии подключения записываем переменные в файл
 });
