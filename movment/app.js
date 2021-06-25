@@ -10,7 +10,7 @@ var message = guid + '|send_data|'; // заготовка сообщения
 var Chek = false;
 setInterval(myFunc, time_delay); // задаем интервал отправки сообщения и функию которая будет постоянно выполняться
 
-client.connect(1337, '127.0.0.1', function () {
+client.connect(4040, '127.0.0.1', function () {
 	console.log('Connected');                        // событие подключения в серверу
 	client.write(guid + '|' + 'get_settings' + '|'); // при подключении отправляем запрос на настройки
 });
