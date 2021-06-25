@@ -17,6 +17,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "lighting", "lighting\lighti
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "movment", "movment\movment.njsproj", "{8008225C-D859-4A83-95B6-93DAF16C672D}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "pressure", "pressure\pressure.njsproj", "{E25AB2E6-4157-46FA-8981-DF4495FD07E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,18 @@ Global
 		{8008225C-D859-4A83-95B6-93DAF16C672D}.Release|x64.Build.0 = Release|Any CPU
 		{8008225C-D859-4A83-95B6-93DAF16C672D}.Release|x86.ActiveCfg = Release|Any CPU
 		{8008225C-D859-4A83-95B6-93DAF16C672D}.Release|x86.Build.0 = Release|Any CPU
+		{E25AB2E6-4157-46FA-8981-DF4495FD07E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E25AB2E6-4157-46FA-8981-DF4495FD07E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E25AB2E6-4157-46FA-8981-DF4495FD07E9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E25AB2E6-4157-46FA-8981-DF4495FD07E9}.Debug|x64.Build.0 = Debug|Any CPU
+		{E25AB2E6-4157-46FA-8981-DF4495FD07E9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E25AB2E6-4157-46FA-8981-DF4495FD07E9}.Debug|x86.Build.0 = Debug|Any CPU
+		{E25AB2E6-4157-46FA-8981-DF4495FD07E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E25AB2E6-4157-46FA-8981-DF4495FD07E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E25AB2E6-4157-46FA-8981-DF4495FD07E9}.Release|x64.ActiveCfg = Release|Any CPU
+		{E25AB2E6-4157-46FA-8981-DF4495FD07E9}.Release|x64.Build.0 = Release|Any CPU
+		{E25AB2E6-4157-46FA-8981-DF4495FD07E9}.Release|x86.ActiveCfg = Release|Any CPU
+		{E25AB2E6-4157-46FA-8981-DF4495FD07E9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,6 +116,7 @@ Global
 		{2DC4B86E-51A8-4C10-99C5-FC8F2DB28D6B} = {51B930E4-6134-45FA-993B-ABF4434894CB}
 		{C84F9505-70BD-4F82-938F-45F86624B616} = {51B930E4-6134-45FA-993B-ABF4434894CB}
 		{8008225C-D859-4A83-95B6-93DAF16C672D} = {51B930E4-6134-45FA-993B-ABF4434894CB}
+		{E25AB2E6-4157-46FA-8981-DF4495FD07E9} = {51B930E4-6134-45FA-993B-ABF4434894CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D65597BC-7EA8-4106-81BD-DB29AA802052}

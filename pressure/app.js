@@ -19,7 +19,7 @@ function myFunc() {
 		FakeSens();
 		console.log('Client message: ' + message + move_Flag); // основная функция отправки сообщения
 		client.write(guid + "|send_data|" + move_Flag);
-	}
+    }
 }
 function randomIntFromInterval(min, max) { // функция рандома в промежутке от мин до макс включительно
 	return Math.floor(Math.random() * (max - min + 1) + min)
