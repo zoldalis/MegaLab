@@ -10,6 +10,8 @@ namespace Client.Data
 {
     public class Controller
     {
+        private static readonly char delimiter = ';';
+
         private string _id;
         [Key]
         public string Id { get { return _id; } set { _id = value; } }
@@ -18,8 +20,17 @@ namespace Client.Data
         public string User { get; set; }
         public string Settings { get; set; }
 
+        public string _values { get; set; }
+
         [NotMapped]
-        public List<string> Values { get; set; }
+        public string[] Values
+        {
+            get { return _values.Split(delimiter); }
+            set
+            {
+                _values = string.Join($"{delimiter}", value);
+            }
+        }
 
     }
 

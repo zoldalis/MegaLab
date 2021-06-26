@@ -13,9 +13,9 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<h1>Добавить новый контроллер</h1>
 
-<h4>Controller</h4>
+<h4>Начальные параметры</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -28,50 +28,107 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Тип Датчика</label>
-                <input name="typeinp" bind="type" list="typelist" asp-for="Controller.Type" class="form-control" />
+                <input id="typeinp" list="typelist" asp-for="Controller.Type" class="form-control" />
                 <datalist id="typelist">
                     <option value="Датчик Температуры"></option>
                     <option value="Датчик Давления"></option>
                     <option value="Датчик Движения"></option>
                     <option value="Датчик Освещения"></option>
-                    <option value="Датчик Влажнности"></option>
+                    <option value="Датчик Влажности"></option>
                 </datalist>
-                <span asp-validation-for="Controller.Type" class="text-danger"></span>
             </div>
             @{CreateModel.username = User.Identity.Name;}
+            
+
+            <div id="temp" class="form-group">
+                <b class="datch_set">Настройки Датчика Температуры </b>
+                <br />
+                <br />
+                <label class="control-label">Начальная температура</label>
+                <input asp-for="start_temp" class="form-control" />
+                <br />
+                <label class="control-label">Температура начала охлаждения</label>
+                <input asp-for="start_cool" class="form-control" />
+                <br />
+                <label class="control-label">Температура конца охлаждения</label>
+                <input asp-for="end_cool" class="form-control" />
+                <br />
+                <label class="control-label">Температура начала подогрева</label>
+                <input asp-for="start_heat" class="form-control" />
+                <br />
+                <label class="control-label">Температура конца подогрева</label>
+                <input asp-for="end_heat" class="form-control" />
+                <br />
+                <label class="control-label">Максимальная температура</label>
+                <input asp-for="max_temp" class="form-control" />
+                <br />
+                <label class="control-label">Минимальная температура</label>
+                <input asp-for="min_temp" class="form-control" />
+                <br />
+                <label class="control-label">Интервал отправки показаний (в с.)</label>
+                <input asp-for="interval_temp" class="form-control" />
+                <br />
+            </div>
+            <div id="press" class="form-group">
+                <b class="datch_set">Настройки Датчика Давления</b>
+                <br />
+                <br />
+                <label class="control-label">Интервал отправки показаний (в с.)</label>
+                <input asp-for="interval_press" class="form-control" />
+                <br />
+            </div>
+            <div id="move" class="form-group">
+                <b class="datch_set">Настройки Датчика Движения</b>
+                <br />
+                <br />
+                <label class="control-label">Чувствительность</label>
+                <input asp-for="sensetivity" class="form-control" />
+            </div>
+            <div id="light" class="form-group">
+                <b class="datch_set">Настройки Датчика Освещения</b>
+                <br />
+                <br />
+                <label class="control-label">Интервал отправки показаний (в с.)</label>
+                <input asp-for="interval_light" class="form-control" />
+                <br />
+                <label class="control-label">Начало светового дня</label>
+                <input asp-for="start_light_day" class="form-control" />
+                <br />
+                <label class="control-label">Конец светового дня </label>
+                <input asp-for="end_light_day" class="form-control" />
+                <br />
+            </div>
+            <div id="humid" class="form-group">
+                <b class="datch_set">Настройки Датчика Влажности</b>
+                <br />
+                <br />
+                <label class="control-label">Начальная влажность (в %) </label>
+                <input asp-for="start_humi" class="form-control" />
+                <br />
+                <label class="control-label">Влажность начала полива (в %)</label>
+                <input asp-for="start_pouring" class="form-control" />
+                <br />
+                <label class="control-label">Влажность конца полива (в %)</label>
+                <input asp-for="end_pouring" class="form-control" />
+                <br />
+                <label class="control-label">Интервал отправки показаний (в с.)</label>
+                <input asp-for="interval_humi" class="form-control" />
+            </div>
+
             @*<div class="form-group">
-            <label asp-for="Controller.User" class="control-label"></label>
-            <input asp-for="Controller.User" class="form-control" />
-            <span asp-validation-for="Controller.User" class="text-danger"></span>
-        </div>
-            *@
-            @if (Model.type == null)
-            {
-        <div class="form-group">
-            <label class="control-label">Настройки Датчика Температуры</label>
-            <input asp-for="Controller.Settings" class="form-control" />
-            <span asp-validation-for="Controller.Settings" class="text-danger"></span>
-            <input asp-for="Controller.Settings" class="form-control" />
-            <span asp-validation-for="Controller.Settings" class="text-danger"></span>
-            <input asp-for="Controller.Settings" class="form-control" />
-            <span asp-validation-for="Controller.Settings" class="text-danger"></span>
-            <input asp-for="Controller.Settings" class="form-control" />
-        </div>
-            }
-            <div class="form-group">
                 <label class="control-label">Настройки</label>
                 <input asp-for="Controller.Settings" class="form-control" />
                 <span asp-validation-for="Controller.Settings" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Добавить" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="AddController">Back to List</a>
+    <a asp-page="AddController">Назад к списку</a>
 </div>
 
 @section Scripts {

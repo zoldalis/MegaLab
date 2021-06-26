@@ -9,7 +9,6 @@ using Client.Data;
 using System.Data;
 using FusionCharts.DataEngine;
 using FusionCharts.Visualization;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Client.Pages
 {
@@ -25,7 +24,7 @@ namespace Client.Pages
             _context = context;
         }
 
-        public Client.Data.Controller Controller { get; set; }
+        public Client.Data.Controller controller { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
@@ -34,24 +33,77 @@ namespace Client.Pages
                 return NotFound();
             }
 
-            Controller = await _context.Controllers.FirstOrDefaultAsync(m => m.Id == id);
+            controller = await _context.Controllers.FirstOrDefaultAsync(m => m.Id == id);
 
-            
+            string[] values = controller.Values;
+
+
 
             // create data table to store data
             DataTable ChartData = new DataTable();
             // Add columns to data table
-            ChartData.Columns.Add("Programming Language", typeof(System.String));
-            ChartData.Columns.Add("Users", typeof(System.Double));
+
+            if (controller.Type == "humidity")
+            {
+                ChartData.Columns.Add("time", typeof(System.String));
+                ChartData.Columns.Add("Humidity %", typeof(System.Double));
+            }
+            else if (controller.Type == "temperature")
+            {
+                ChartData.Columns.Add("time", typeof(System.String));
+                ChartData.Columns.Add("Degrees", typeof(System.Double));
+                //foreach (var item in values)
+                //{
+                //    item.Split('|')[];
+                //    ChartData.Rows.Add(, 62000);
+                //}
+            }
+            else if (controller.Type == "pressure")
+            {
+                ChartData.Columns.Add("time", typeof(System.String));
+                ChartData.Columns.Add("bar", typeof(System.Double));
+                foreach (var item in values)
+                {
+                    DateTime dt = DateTime.Parse(item.Split('|')[0]);
+                    ChartData.Rows.Add(dt, item.Split('|')[3]);
+                }
+            }
+            else if (controller.Type == "movement")
+            {
+                ChartData.Columns.Add("time", typeof(System.String));
+                ChartData.Columns.Add("actions", typeof(System.Double));
+                foreach (var item in values)
+                {
+                    DateTime dt = DateTime.Parse(item.Split('|')[0]);
+                    ChartData.Rows.Add(dt, item.Split('|')[3]);
+                }
+            }
+            else if (controller.Type == "lightning")
+            {
+                ChartData.Columns.Add("time", typeof(System.String));
+                ChartData.Columns.Add("lux", typeof(System.Double));
+                foreach (var item in values)
+                {
+                    DateTime dt = DateTime.Parse(item.Split('|')[0]);
+                    ChartData.Rows.Add(dt, item.Split('|')[3]);
+                }
+            }
+            else
+            {
+                ChartData.Columns.Add("sample", typeof(System.String));
+                ChartData.Columns.Add("sample2", typeof(System.Double));
+            }
             // Add rows to data table
 
-            ChartData.Rows.Add("Java", 62000);
-            ChartData.Rows.Add("Python", 46000);
-            ChartData.Rows.Add("Javascript", 38000);
-            ChartData.Rows.Add("C++", 31000);
-            ChartData.Rows.Add("C#", 27000);
-            ChartData.Rows.Add("PHP", 14000);
-            ChartData.Rows.Add("Perl", 14000);
+
+
+            //ChartData.Rows.Add("Java", 62000);
+            //ChartData.Rows.Add("Python", 46000);
+            //ChartData.Rows.Add("Javascript", 38000);
+            //ChartData.Rows.Add("C++", 31000);
+            //ChartData.Rows.Add("C#", 27000);
+            //ChartData.Rows.Add("PHP", 14000);
+            //ChartData.Rows.Add("Perl", 14000);
 
             // Create static source with this data table
             StaticSource source = new StaticSource(ChartData);
@@ -81,7 +133,7 @@ namespace Client.Pages
             // set chart rendering json
             ChartJson = column.Render();
 
-            if (Controller == null)
+            if (controller == null)
             {
                 return NotFound();
             }

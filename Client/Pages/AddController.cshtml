@@ -6,7 +6,7 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>AddController</h1>
+<h1>Мои контроллеры</h1>
 
 <p>
     <a asp-page="Create">Добавить новый</a>
@@ -15,35 +15,38 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Controller[0].Type)
+                Тип
             </th>
+            @*<th>
+                Пользователь
+            </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.Controller[0].User)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Controller[0].Settings)
+                Конфигурация
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.Controller) {
+        @if(item.User == User.Identity.Name)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Type)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.User)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.Settings)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Подробно</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Удалить</a>
             </td>
         </tr>
+        }
 }
     </tbody>
 </table>

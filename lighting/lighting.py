@@ -5,8 +5,14 @@ import os
 import threading
 
 s = socket.socket()                                                 # создаем обьект сокета
-s.connect(('127.0.0.1', 4040))                                      # подключаемся к серваку
-
+goon = True
+while goon:
+    try:
+        s.connect(('127.0.0.1', 4040))                                      # подключаемся к серваку
+        goon = False
+    except :
+        goon = True
+        print("Let's try connect again...")
 conf_file_path = 'conf_f.txt'                                    # расположение конфиг файла
 #4AA95827-0199-4F82-9CC5-0FB36F1056D9
 full_message_by_byte = bytes('', 'utf-8')                                                # переменная

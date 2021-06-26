@@ -166,59 +166,18 @@ namespace Client
                         }
                         if (msgstruct.guid != "" && msgstruct.msgtype == "send_data")
                         {
-                            string conttype = GetControllerType(msgstruct.guid);
-                            _DBContext.Controllers.Find(msgstruct.guid).Values.Add(msgstruct.msg);
-                            //switch (conttype)
-                            //{
-                            //    
-                            //    case "temperature":
-                            //        {
-
-                            //            string msg_to_send = settings;
-                            //            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                            //            break;
-                            //        }
-                            //    case "pressure":
-                            //        {
-
-                            //            string msg_to_send = settings;
-                            //            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                            //            break;
-                            //        }
-                            //    case "lightning":
-                            //        {
-
-                            //            string msg_to_send = settings;
-                            //            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                            //            break;
-                            //        }
-                            //    case "movement":
-                            //        {
-
-                            //            string msg_to_send = settings;
-                            //            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                            //            break;
-                            //        }
-                            //    case "humidity":
-                            //        {
-
-                            //            string msg_to_send = settings;
-                            //            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
-                            //            break;
-                            //        }
-                            //    default:
-                            //        break;
-                            //}
+                            string msg = DateTime.Now.ToString() + '|';
+                            Controller getted = _DBContext.Controllers.Find(msgstruct.guid);
+                            string[] list = getted.Values;
+                            string[] newarray = new string[list.Length+1];
+                            getted.Values.CopyTo(newarray, 0);
+                            msg += msgstruct.msg;
+                            newarray[list.Length-1] = msg;
+                            _DBContext.Controllers.Find(msgstruct.guid).Values = newarray;
 
                             Console.WriteLine($"method send_data - received : {cmd}");
                         }
                     }
-
-
-
-
-
-
 
                     //await stream.WriteAsync(data, 0, read, stoppingToken);
                     //stream.WriteAsync(Encoding.UTF8.GetBytes("Server Answer"),0,13);
@@ -267,76 +226,51 @@ namespace Client
             return _DBContext.Controllers.Find(guid).Settings;
         }
 
-        
 
-
-        //public void MSGHandle(string msg)
-        //{
-        //    InitController(msg);
-        //}
-
-        //public void InitController(string guid)
-        //{
-        //    Controller cont = new Controller();
-        //    cont.Id = Guid.Parse(guid).ToString();
-        //    _DBContext.Controllers.Add(cont);
-        //}
     }
 }
 
-//МУСОР -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 
 
-
-//public void Init()
+//switch (conttype)
 //{
-//    TcpListener server = null;
-//    try
-//    {
-//        IPAddress localAddr = IPAddress.Parse("127.0.0.1");
-//        server = new TcpListener(localAddr, port);
 
-//        // запуск слушателя
-//        server.Start();
-
-//        while (true)
+//    case "temperature":
 //        {
-//            Console.WriteLine("Ожидание подключений... ");
 
-//            // получаем входящее подключение
-//            TcpClient client = server.AcceptTcpClient();
-//            Console.WriteLine("Подключен клиент. Выполнение запроса...");
-//            // получаем сетевой поток для чтения и записи
-//            NetworkStream stream = client.GetStream();
-//            byte[] mews = new byte[100];
-//            stream.Read(mews);
-//            string result = Encoding.UTF8.GetString(mews);
-//            MSGHandle(result);
-//            Console.WriteLine("Message Is:" + result);
-//            // сообщение для отправки клиенту
-//            string response = "Hello from server";
-//            // преобразуем сообщение в массив байтов
-//            byte[] data = Encoding.UTF8.GetBytes(response);
-
-//            // отправка сообщения
-//            stream.Write(data, 0, data.Length);
-//            Console.WriteLine("Отправлено сообщение: {0}", response);
-//            // закрываем поток
-//            stream.Close();
-//            // закрываем подключение
-//            client.Close();
+//            string msg_to_send = msgstruct.msg;
+//            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+//            break;
 //        }
-//    }
-//    catch (Exception e)
-//    {
-//        Console.WriteLine(e.Message);
-//    }
-//    finally
-//    {
-//        if (server != null)
-//            server.Stop();
-//    }
+//    case "pressure":
+//        {
+
+//            string msg_to_send = msgstruct.msg;
+//            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+//            break;
+//        }
+//    case "lightning":
+//        {
+
+//            string msg_to_send = msgstruct.msg;
+//            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+//            break;
+//        }
+//    case "movement":
+//        {
+
+//            string msg_to_send = msgstruct.msg;
+//            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+//            break;
+//        }
+//    case "humidity":
+//        {
+
+//            string msg_to_send = msgstruct.msg;
+//            stream.WriteAsync(Encoding.UTF8.GetBytes(msg_to_send), 0, msg_to_send.Length);
+//            break;
+//        }
+//    default:
+//        break;
 //}
-
-
