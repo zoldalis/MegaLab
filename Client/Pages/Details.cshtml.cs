@@ -37,7 +37,10 @@ namespace Client.Pages
 
             string[] values = controller.Values;
 
+            if (values.Length == 0)
+                return Page();
 
+            int start_point = 0;
 
             // create data table to store data
             DataTable ChartData = new DataTable();
@@ -46,17 +49,29 @@ namespace Client.Pages
             if (controller.Type == "humidity")
             {
                 ChartData.Columns.Add("time", typeof(System.String));
-                ChartData.Columns.Add("Humidity %", typeof(System.Double));
+                ChartData.Columns.Add("mm/pt", typeof(System.Double));
+                foreach (var item in values)
+                {
+                    if (item != "")
+                    {
+                        ChartData.Rows.Add(start_point, item.Split('|')[1]);
+                        start_point += 10;
+                    }
+                }
             }
             else if (controller.Type == "temperature")
             {
                 ChartData.Columns.Add("time", typeof(System.String));
                 ChartData.Columns.Add("Degrees", typeof(System.Double));
-                //foreach (var item in values)
-                //{
-                //    item.Split('|')[];
-                //    ChartData.Rows.Add(, 62000);
-                //}
+                foreach (var item in values)
+                {
+                    double dd = 0;
+                    if (item != "")
+                    {
+                        ChartData.Rows.Add(start_point, item.Split('|')[1]);
+                        start_point += 10;
+                    }
+                }
             }
             else if (controller.Type == "pressure")
             {
@@ -64,9 +79,11 @@ namespace Client.Pages
                 ChartData.Columns.Add("bar", typeof(System.Double));
                 foreach (var item in values)
                 {
-                    DateTime dt = DateTime.Parse(item.Split('|')[0]);
-                    ChartData.Rows.Add(dt, item.Split('|')[3]);
+                    //DateTime dt = DateTime.Parse(item.Split('|')[0]);
+                    ChartData.Rows.Add(start_point, item.Split('|')[3]);
+                    start_point += 10;
                 }
+                start_point = 0;
             }
             else if (controller.Type == "movement")
             {
@@ -74,8 +91,16 @@ namespace Client.Pages
                 ChartData.Columns.Add("actions", typeof(System.Double));
                 foreach (var item in values)
                 {
-                    DateTime dt = DateTime.Parse(item.Split('|')[0]);
-                    ChartData.Rows.Add(dt, item.Split('|')[3]);
+                    if (item != "")
+                    {
+                        //DateTime dt = DateTime.Parse(item.Split('|')[0]);
+                        int value = 0;
+                        if (item.Split('|')[1] == "true")
+                            value = 1;
+                        ChartData.Rows.Add(start_point, value);
+                        start_point += 10;
+                    }
+
                 }
             }
             else if (controller.Type == "lightning")
@@ -84,8 +109,12 @@ namespace Client.Pages
                 ChartData.Columns.Add("lux", typeof(System.Double));
                 foreach (var item in values)
                 {
-                    DateTime dt = DateTime.Parse(item.Split('|')[0]);
-                    ChartData.Rows.Add(dt, item.Split('|')[3]);
+                    if (item != "")
+                    {
+                        //DateTime dt = DateTime.Parse(item.Split('|')[0]);
+                        ChartData.Rows.Add(start_point, item.Split('|')[1]);
+                        start_point += 10;
+                    }
                 }
             }
             else
@@ -119,15 +148,14 @@ namespace Client.Pages
             // Set DataModel instance as the data source of the chart
             column.Data.Source = model;
             // Set Chart Title
-            column.Caption.Text = "Most popular programming language";
+            column.Caption.Text = controller.Type;
             // Set chart sub title
-            column.SubCaption.Text = "2017-2018";
             // hide chart Legend
             column.Legend.Show = false;
             // set XAxis Text
-            column.XAxis.Text = "Programming Language";
+            column.XAxis.Text = "Time";
             // Set YAxis title
-            column.YAxis.Text = "User";
+            column.YAxis.Text = "Value";
             // set chart theme
             column.ThemeName = FusionChartsTheme.ThemeName.FUSION;
             // set chart rendering json

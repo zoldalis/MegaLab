@@ -21,7 +21,7 @@ id = "python-000000901"                                #########################
 light = 0                                                             # флаг отвечающий за вкл\выкл свет
 main_event = True                                                   # флаг работы датчика
 
-time_delay = 0                                                          # промежутки между отправкой сообщения
+time_delay = 1                                                          # промежутки между отправкой сообщения
 last_time = time.time()                                             # фиксируем время начала
 
 fake_time = 0#X-X#                                                  # "#X-X#" - все что помечено этим сиволом относится к формальной симуляции времени/показателей света
@@ -99,10 +99,11 @@ def timer(last_time):                                               # метод
 def final_method_sending():                                   
     global time_delay
     global last_time
-    if timer(last_time) >= time_delay:                              # после отправки сообщения сбрасываем таймер
-        send_message()
-        print('message done' + str(timer(last_time)))
-        last_time = time.time()
+    #if timer(last_time) >= time_delay:                              # после отправки сообщения сбрасываем таймер
+    send_message()
+    print('message done' + str(timer(last_time)))
+    last_time = time.time()
+    time.sleep(1)
     
 def send_message():                                                 # метод отправки сообщения
     s.sendall(construct(id,message,fake_time))

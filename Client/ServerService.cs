@@ -142,6 +142,20 @@ namespace Client
                         break;
                     string cmd = Encoding.UTF8.GetString(data, 0, read);
 
+                    string first;
+                    string second;
+
+
+
+                    if (cmd.Contains('!'))
+                    {
+                        string[] splited = cmd.Split("!");
+                        if (splited[0] != "")
+                        {
+                            first = splited[0];
+                            cmd = first;
+                        }
+                    }
                     //тут нужно реализовать логику обработки данных которые нам передали, распарсить их, понять когда нам передали guid, а когда собщение с данными датчика например
 
 
@@ -168,14 +182,18 @@ namespace Client
                         {
                             string msg = DateTime.Now.ToString() + '|';
                             Controller getted = _DBContext.Controllers.Find(msgstruct.guid);
-                            string[] list = getted.Values;
-                            string[] newarray = new string[list.Length+1];
-                            getted.Values.CopyTo(newarray, 0);
+                            //string[] list = getted.Values;
+                            //string[] newarray = new string[list.Length+1];
+                            //getted.Values.CopyTo(newarray, 0);
                             msg += msgstruct.msg;
-                            newarray[list.Length-1] = msg;
-                            _DBContext.Controllers.Find(msgstruct.guid).Values = newarray;
+                            //newarray[list.Length-1] = msg;
 
-                            Console.WriteLine($"method send_data - received : {cmd}");
+                            getted.Values = getted.Values.Append(msg).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                            _DBContext.SaveChanges();
+
+                            //_DBContext.Controllers.Find(msgstruct.guid).Values = newarray;
+
+                            //Console.WriteLine($"method send_data - received : {cmd}");
                         }
                     }
 
@@ -218,7 +236,6 @@ namespace Client
                 return true;
             else
                 return false;
-
         }
 
         public string GetContSettings(string guid)
@@ -226,7 +243,12 @@ namespace Client
             return _DBContext.Controllers.Find(guid).Settings;
         }
 
-
+        public void AddValueTo(string guid, string val)
+        {
+            //string curstring = _DBContext.Controllers.Find(guid).Values;
+            //string newstring = curstring + ! + val
+            //retrun newstring
+        }
     }
 }
 

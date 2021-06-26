@@ -32,6 +32,8 @@ namespace Client.Data
             }
         }
 
+        // public string Values { get; set; }
+
     }
 
 

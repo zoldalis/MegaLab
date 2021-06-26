@@ -22,24 +22,26 @@ namespace Client.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             //modelBuilder.Entity<Controller>()
             //.Property<string>("ValueCollection")
             //.HasField("_values");
 
-            modelBuilder
-                .Entity<IdentityUserLogin<string>>().HasNoKey();
-            modelBuilder
-            .Entity<IdentityUserRole<string>>().HasNoKey();
-            modelBuilder
-            .Entity<IdentityUserToken<string>>().HasNoKey();
-            modelBuilder
-            .Entity<IdentityUser<string>>().HasNoKey();
-            modelBuilder
-            .Entity<IdentityUserClaim<string>>().HasNoKey();
-            modelBuilder
-            .Entity<IdentityRole<string>>().HasNoKey();
-            modelBuilder
-           .Entity<IdentityRoleClaim<string>>().HasNoKey();
+           // modelBuilder
+           //     .Entity<IdentityUserLogin<string>>().HasNoKey();
+           // modelBuilder
+           // .Entity<IdentityUserRole<string>>().HasNoKey();
+           // modelBuilder
+           // .Entity<IdentityUserToken<string>>().HasNoKey();
+           // modelBuilder
+           // .Entity<IdentityUser<string>>().HasNoKey();
+           // modelBuilder
+           // .Entity<IdentityUserClaim<string>>().HasNoKey();
+           // modelBuilder
+           // .Entity<IdentityRole<string>>().HasNoKey();
+           // modelBuilder
+           //.Entity<IdentityRoleClaim<string>>().HasNoKey();
 
             var valueComparer = new ValueComparer<string[]>(
     (c1, c2) => c1.SequenceEqual(c2),

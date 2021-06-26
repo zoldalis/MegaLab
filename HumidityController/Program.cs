@@ -126,7 +126,7 @@ namespace Client
                 bool flag = false;
                 string message = "";
                 
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < 200; i++)
                 {
                     
                     System.Threading.Thread.Sleep(inter);
@@ -158,7 +158,7 @@ namespace Client
                         H -= 5;
                     }
 
-                    
+                    message += "!";
                     byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
                     
 
